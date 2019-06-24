@@ -1,0 +1,64 @@
+<programa> :: =  <declaracoes>;
+
+<declaracoes> :: =  <se> "(" <Condicoes> ")" "{" <Atribuicao> "}"
+| <enquanto> "(" <Condicoes> ")" "{" <Atribuicao> <Count> "}" 
+| <escolha> "(" <identificador> ")" <caso> <numero> ":" <Operacoes> 
+| <para> "(" <Condicoes> <Count> ")" "{" <Atribuicao> "}" 
+| <senao> "{" <Atribuicao> "}" 
+| <senao_se> "(" <Comparacoes> ")" "{" <Atribuicao> "}" 
+;
+
+Atribuicao: ID IG NUM
+| ID IG ID 
+| ID IG CHAR
+| ID IG DOUB
+| CHAR ID 
+| INT ID 
+| DOUB ID  
+| CHAR ID IG ASPSI ID ASPSI
+| INT ID IG NUM
+| DOUB ID IG FLOAT
+  
+Operacoes : NUM ADD NUM
+| NUM SUB NUM
+| FLOAT ADD FLOAT
+| FLOAT SUB FLOAT
+| NUM ADD FLOAT
+| NUM SUB FLOAT
+| FLOAT ADD NUM
+| FLOAT SUB NUM
+| NUM MAQ NUM
+| NUM MEQ NUM
+| NUM IGU NUM
+;
+
+Comparacoes :  NUM MAQ NUM
+| NUM MEQ NUM
+| NUM IGU NUM
+| NUM DIF NUM
+| ID MEQ ID
+| ID MAQ ID 
+| ID IGU ID 
+| ID DIF ID
+;
+
+Condicoes :  NUM MAQ NUM
+| NUM MEQ NUM
+| NUM IGU NUM
+| NUM DIF NUM
+| NUM MAQ NUM AND NUM MAQ NUM
+| NUM MAQ NUM AND NUM MEQ NUM
+| ID MAQ ID
+| ID MEQ ID
+| ID IGU ID
+| ID DIF ID
+| ID MAQ ID AND ID MAQ ID
+| ID MAQ ID AND ID MEQ ID
+;
+
+Count :  NUM ADD ADD
+| NUM SUB SUB
+| ID ADD ADD
+| ID SUB SUB
+|
+;
