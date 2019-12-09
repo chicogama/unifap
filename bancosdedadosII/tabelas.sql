@@ -1,0 +1,10 @@
+#TABELAS
+
+TABLE FUNCIONARIO;
+
+TABLE SEXO
+
+TABLE NACIMENTO;
+
+table matricula;
+
