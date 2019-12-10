@@ -53,4 +53,25 @@ create table tbl_sexo(
     sexo VARCHAR(32)
 );
 
+create table tbl_login(
+	id_login
+    fk_user
+    login
+    senha
+);
+
+create tabel tbl_ddd(
+	id_ddd
+    regiao
+    fk_uf
+);
+
+
+create table tbl_semestre(
+	id_semestre
+    ano
+    periodo_letivo
+    data_inicio
+    data_termino
+);
 
