@@ -1,34 +1,31 @@
 #TABELAS
 create table tbl_reitoria(
 	id_reitoria int not null primary key  auto_increment,
-    nome varchar(120),
-);
-
-create table tbl_proreitoria(
-	id_proreitoria int not null primary key  auto_increment,
-    nome varchar(120),
-    fk_reitoria
+    nome varchar(120)
 );
 
 CREATE TABLE tbl_funcionario(
 	matricula INT not null primary key  auto_increment,
-    vinculo
-    ocupacao
-    salario
-    carga_horaria
-    data_admissao
-	
+    vinculo varchar (54),
+    carga_horaria varchar (4),
+    data_admissao date,
+    data_demissao date
 );
 
 create table tbl_func_professor(
-	id_professor
-    fk_funcionario
-    fk_reitoria
-    fk_especialidade
+	id_professor int not null primary key  auto_increment,
+    categoria varchar (32),
+    regime varchar(100),
+    salario decimal (8,2),
+    fk_funcionario int,
+    fk_reitoria int,
+    fk_especialidade int,
 );
 
 create table tbl_func_analista(
-	id_analista
+	id_analista int not null primary key  auto_increment,
+    ocupacao varchar (32),
+    salario
     fk_funcionario
     fk_reitoria
     fk _user
@@ -36,6 +33,8 @@ create table tbl_func_analista(
 
 create table tabel tbl_func_tecnico(
 	id_tecnico
+    ocupacao
+    salario
     fk_funcionario
     fk_reitoria
     fk _user
@@ -67,10 +66,10 @@ create tabel tbl_ddd(
 );
 
 
-create table tbl_semestre(
-	id_semestre
+create table tbl_calendario(
+	id_calendario
     ano
-    periodo_letivo
+    periodo
     data_inicio
     data_termino
 );
