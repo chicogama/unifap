@@ -16,8 +16,6 @@ select*from tbl_uf;
 
 select*from tbl_tel_user;
 
-select*from tbl_tel_user;
-
 select*from tbl_tipo_tel;
 
 select*from tbl_professor;
@@ -36,9 +34,15 @@ select*from tbl_disciplina;
 
 select*from tbl_turmas;
 
+select*from tbl_prof_disc;
+
 select*from tbl_historico;
 
 select*from tbl_disc_hist;
+
+
+
+
 
 
 
