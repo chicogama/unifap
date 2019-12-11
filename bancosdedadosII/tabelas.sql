@@ -143,3 +143,9 @@ add column fk_turno int after fk_curso_turma;
 alter table tbl_turmas
 add foreign key (fk_turno) references tbl_turno (id_turno);	
 
+
+alter table tbl_professor
+add column fk_funcionario_prof int after fk_user_prof;
+
+alter table tbl_professor
+add foreign key (fk_funcionario_prof) references tbl_func_professor (id_professor);

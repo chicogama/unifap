@@ -631,13 +631,16 @@ DROP TABLE IF EXISTS `tbl_professor`;
 CREATE TABLE `tbl_professor` (
   `id_prof` int(11) NOT NULL AUTO_INCREMENT,
   `fk_user_prof` int(11) NOT NULL,
+  `fk_funcionario_prof` int(11) DEFAULT NULL,
   `fk_coleg_prof` int(11) NOT NULL,
   `status_prof` int(11) NOT NULL,
   PRIMARY KEY (`id_prof`),
   KEY `prof_user` (`fk_user_prof`),
   KEY `prof_coleg` (`fk_coleg_prof`),
+  KEY `fk_funcionario_prof` (`fk_funcionario_prof`),
   CONSTRAINT `prof_coleg` FOREIGN KEY (`fk_coleg_prof`) REFERENCES `tbl_colegiado` (`id_colegiado`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `prof_user` FOREIGN KEY (`fk_user_prof`) REFERENCES `tbl_user` (`id_user`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `prof_user` FOREIGN KEY (`fk_user_prof`) REFERENCES `tbl_user` (`id_user`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `tbl_professor_ibfk_1` FOREIGN KEY (`fk_funcionario_prof`) REFERENCES `tbl_func_professor` (`id_professor`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -647,7 +650,7 @@ CREATE TABLE `tbl_professor` (
 
 LOCK TABLES `tbl_professor` WRITE;
 /*!40000 ALTER TABLE `tbl_professor` DISABLE KEYS */;
-INSERT INTO `tbl_professor` VALUES (1,4,1,0);
+INSERT INTO `tbl_professor` VALUES (1,4,NULL,1,0);
 /*!40000 ALTER TABLE `tbl_professor` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -905,4 +908,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-12-10 21:44:08
+-- Dump completed on 2019-12-10 22:14:11
