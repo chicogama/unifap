@@ -1,4 +1,4 @@
-CREATE VIEW `view_usuario` AS
+#CREATE VIEW `view_usuario` AS
   SELECT 
     `tbl_usuarios`.`nome_usuario` AS `Nome`,
     `tbl_usuarios`.`sobrenome_usuario` AS `Sobrenome`,
@@ -18,7 +18,7 @@ CREATE VIEW `view_usuario` AS
         JOIN `tbl_telefones_usuarios` ON `tbl_telefones_usuarios`.`fk_usuario_telefone` = `tbl_usuarios`.`id_usuario`
         JOIN `tbl_tipos_telefone` ON `tbl_telefones_usuarios`.`fk_tipo_telefone` = `tbl_tipos_telefone`.`id_tipo_telefone`;
 
-CREATE VIEW `view_endereco_usuario` AS
+#CREATE VIEW `view_endereco_usuario` AS
   SELECT 
     `tbl_usuarios`.`nome_usuario` AS `Nome`,
     `tbl_usuarios`.`sobrenome_usuario` AS `Sobrenome`,
@@ -38,13 +38,13 @@ CREATE VIEW `view_endereco_usuario` AS
         JOIN `tbl_cidades` ON `tbl_bairros`.`fk_cidade` = `tbl_cidades`.`id_cidade`
         JOIN `tbl_ufs` ON `tbl_cidades`.`fk_uf` = `tbl_ufs`.`id_uf`;
 
-CREATE VIEW `view_colegiados` AS
+#CREATE VIEW `view_colegiados` AS
   SELECT
     `tbl_colegiados`.`nome_colegiado` AS `Nome`,
     `tbl_colegiados`.`codigo_colegiado` AS `Sigla`
       FROM `tbl_colegiados`;
 
-CREATE VIEW `view_cursos` AS
+#CREATE VIEW `view_cursos` AS
   SELECT 
     `tbl_cursos`.`nome_curso` AS `Nome`,
     `tbl_colegiados`.`codigo_colegiado` AS `Colegiado`
@@ -52,7 +52,7 @@ CREATE VIEW `view_cursos` AS
         JOIN `tbl_colegiados` ON `tbl_cursos`.`fk_colegiado_curso` = `tbl_colegiados`.`id_colegiado`;
 
 -- -----
-CREATE View `view_disciplinas` AS -- Não sei fazer essa view
+#CREATE View `view_disciplinas` AS -- Não sei fazer essa view
   SELECT 
     `tbl_disciplinas`.`nome_disciplina` AS `Nome`,
     `tbl_disciplinas`.`carga_horaria_disciplina` AS `Carga Horária`,

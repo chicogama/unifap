@@ -115,7 +115,7 @@ add column fk_calendario int;
 alter table tbl_turmas
 add foreign key (fk_calendario) references tbl_calendario(id_calendario);
 
-create table tbl_cooredenacao(
+create table tbl_coordenacao(
 	id_coordadenacao int not null primary key auto_increment,
     nome varchar (120),
     fk_curso int,
@@ -124,11 +124,11 @@ create table tbl_cooredenacao(
     fk_tecnico_lab int,
     fk_tecnico_adm int,
     
-    foreign key (fk_curso) references tbl_cusros(id_curso),
-    foreign key (fk_coordenador) references tbl_professor (id_professor),
-    foreign key (fk_vicecoordenador) references tbl_professor (id_professor),
-    foreign key (fk_tecnico_lab) references tbl_tecnico (id_tecnico),
-    foreign key (fk_tecnico_adm) references tbl_tecnico (id_tecnico)
+    foreign key (fk_curso) references tbl_cursos(id_curso),
+    foreign key (fk_coordenador) references tbl_professor(id_prof),
+    foreign key (fk_vicecoordenador) references tbl_professor (id_prof),
+    foreign key (fk_tecnico_lab) references tbl_func_tecnico(id_tecnico),
+    foreign key (fk_tecnico_adm) references tbl_func_tecnico(id_tecnico)
 );
 
 

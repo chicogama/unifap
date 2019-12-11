@@ -42,6 +42,7 @@ select*from tbl_disc_hist;
 
 select*from tbl_login;
 
+select*from tbl_tecnico;
 
 
 

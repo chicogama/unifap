@@ -189,6 +189,44 @@ INSERT INTO `tbl_colegiado` VALUES (1,NULL,'DEPARTAMENTO DE CIÊNCIAS EXATAS E T
 UNLOCK TABLES;
 
 --
+-- Table structure for table `tbl_coordenacao`
+--
+
+DROP TABLE IF EXISTS `tbl_coordenacao`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `tbl_coordenacao` (
+  `id_coordadenacao` int(11) NOT NULL AUTO_INCREMENT,
+  `nome` varchar(120) DEFAULT NULL,
+  `fk_curso` int(11) DEFAULT NULL,
+  `fk_coordenador` int(11) DEFAULT NULL,
+  `fk_vicecoordenador` int(11) DEFAULT NULL,
+  `fk_tecnico_lab` int(11) DEFAULT NULL,
+  `fk_tecnico_adm` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id_coordadenacao`),
+  KEY `fk_curso` (`fk_curso`),
+  KEY `fk_coordenador` (`fk_coordenador`),
+  KEY `fk_vicecoordenador` (`fk_vicecoordenador`),
+  KEY `fk_tecnico_lab` (`fk_tecnico_lab`),
+  KEY `fk_tecnico_adm` (`fk_tecnico_adm`),
+  CONSTRAINT `tbl_coordenacao_ibfk_1` FOREIGN KEY (`fk_curso`) REFERENCES `tbl_cursos` (`id_curso`),
+  CONSTRAINT `tbl_coordenacao_ibfk_2` FOREIGN KEY (`fk_coordenador`) REFERENCES `tbl_professor` (`id_prof`),
+  CONSTRAINT `tbl_coordenacao_ibfk_3` FOREIGN KEY (`fk_vicecoordenador`) REFERENCES `tbl_professor` (`id_prof`),
+  CONSTRAINT `tbl_coordenacao_ibfk_4` FOREIGN KEY (`fk_tecnico_lab`) REFERENCES `tbl_func_tecnico` (`id_tecnico`),
+  CONSTRAINT `tbl_coordenacao_ibfk_5` FOREIGN KEY (`fk_tecnico_adm`) REFERENCES `tbl_func_tecnico` (`id_tecnico`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tbl_coordenacao`
+--
+
+LOCK TABLES `tbl_coordenacao` WRITE;
+/*!40000 ALTER TABLE `tbl_coordenacao` DISABLE KEYS */;
+/*!40000 ALTER TABLE `tbl_coordenacao` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `tbl_curso_discip`
 --
 
@@ -908,4 +946,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-12-10 22:14:11
+-- Dump completed on 2019-12-11 13:19:46
