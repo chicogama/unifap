@@ -1,9 +1,44 @@
 #TRIGGERS
 
 #LOGIN
-create trigger tg_login after insert on tbl_user
-for each row insert into tbl_login values (NULL, new.user_id, new.email_user, md5(new.cpf_user));
 
-CREATE TRIGGER TELEFONE AFTER INSERT ON tbl_user
-FOR EACH ROW INSERT INTO tbl_tel_user VALUES (NULL, new.id_user, 2, "(96)9 8112-1212");
+drop trigger if exists tg_login;
 
+DELIMITER $
+create trigger tg_login 
+	after insert 
+	on tbl_usuarios for each row
+BEGIN
+	insert into tbl_autenticacoes values (NULL, new.id_usuario, new.email_usuario, md5(new.cpf_usuario));
+END $
+
+DELIMITER ; 
+
+
+drop trigger if exists tg_telefone
+
+DELIMITER $
+CREATE TRIGGER TELEFONE
+	AFTER INSERT 
+    ON tbl_usuarios FOR EACH ROW
+    
+BEGIN
+	INSERT INTO tbl_telefones_usuarios VALUES (NULL, new.id_usuario, 2, 1, "9 8112-1212");
+END $
+
+DELIMITER ; 
+
+
+drop trigger if exists tg_demissao;
+
+DELIMITER $
+	CREATE TRIGGER tg_demissao
+    AFTER UPDATE
+    ON tbl_docentes FOR EACH ROW
+    
+BEGIN
+	UPDATE tbl_funcionarios SET data_demissao = now()
+    where id_funcionario = 1;
+END $
+
+DELIMITER ;

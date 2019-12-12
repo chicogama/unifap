@@ -16,65 +16,31 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `tbl_aluno`
+-- Table structure for table `tbl_autenticacoes`
 --
 
-DROP TABLE IF EXISTS `tbl_aluno`;
+DROP TABLE IF EXISTS `tbl_autenticacoes`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `tbl_aluno` (
-  `id_aluno` int(11) NOT NULL AUTO_INCREMENT,
-  `fk_user_aluno` int(11) NOT NULL,
-  `fk_curso_aluno` int(11) NOT NULL,
-  `fk_turma_aluno` int(11) NOT NULL,
-  `ano_inico` int(11) NOT NULL,
-  PRIMARY KEY (`id_aluno`),
-  KEY `user_aluno` (`fk_user_aluno`),
-  KEY `turma_aluno` (`fk_turma_aluno`),
-  KEY `curso_aluno` (`fk_curso_aluno`),
-  CONSTRAINT `curso_aluno` FOREIGN KEY (`fk_curso_aluno`) REFERENCES `tbl_cursos` (`id_curso`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `turma_aluno` FOREIGN KEY (`fk_turma_aluno`) REFERENCES `tbl_turmas` (`id_turma`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `user_aluno` FOREIGN KEY (`fk_user_aluno`) REFERENCES `tbl_user` (`id_user`) ON DELETE CASCADE ON UPDATE CASCADE
+CREATE TABLE `tbl_autenticacoes` (
+  `id_autenticacao` int(11) NOT NULL AUTO_INCREMENT,
+  `fk_usuario` int(11) DEFAULT NULL,
+  `usuario` varchar(64) DEFAULT NULL,
+  `senha` varchar(64) DEFAULT NULL,
+  PRIMARY KEY (`id_autenticacao`),
+  KEY `usuario_autenticacao` (`fk_usuario`),
+  CONSTRAINT `usuario_autenticacao` FOREIGN KEY (`fk_usuario`) REFERENCES `tbl_usuarios` (`id_usuario`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `tbl_aluno`
+-- Dumping data for table `tbl_autenticacoes`
 --
 
-LOCK TABLES `tbl_aluno` WRITE;
-/*!40000 ALTER TABLE `tbl_aluno` DISABLE KEYS */;
-INSERT INTO `tbl_aluno` VALUES (1,1,3,1,2018);
-/*!40000 ALTER TABLE `tbl_aluno` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `tbl_aluno_disc`
---
-
-DROP TABLE IF EXISTS `tbl_aluno_disc`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `tbl_aluno_disc` (
-  `id_aluno_disc` int(11) NOT NULL AUTO_INCREMENT,
-  `fk_aluno` int(11) NOT NULL,
-  `fk_dicsc` int(11) NOT NULL,
-  PRIMARY KEY (`id_aluno_disc`),
-  KEY `aluno_fk` (`fk_aluno`),
-  KEY `disc_fk` (`fk_dicsc`),
-  CONSTRAINT `aluno_fk` FOREIGN KEY (`fk_aluno`) REFERENCES `tbl_aluno` (`id_aluno`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `disc_fk` FOREIGN KEY (`fk_dicsc`) REFERENCES `tbl_disciplina` (`id_disciplina`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `tbl_aluno_disc`
---
-
-LOCK TABLES `tbl_aluno_disc` WRITE;
-/*!40000 ALTER TABLE `tbl_aluno_disc` DISABLE KEYS */;
-INSERT INTO `tbl_aluno_disc` VALUES (1,1,3),(2,1,5);
-/*!40000 ALTER TABLE `tbl_aluno_disc` ENABLE KEYS */;
+LOCK TABLES `tbl_autenticacoes` WRITE;
+/*!40000 ALTER TABLE `tbl_autenticacoes` DISABLE KEYS */;
+INSERT INTO `tbl_autenticacoes` VALUES (1,11,'adeildo@unifap.br','70575ffec22b0577b09273201f75dfa2');
+/*!40000 ALTER TABLE `tbl_autenticacoes` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -85,13 +51,13 @@ DROP TABLE IF EXISTS `tbl_bairros`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `tbl_bairros` (
-  `BRRS_ID` int(11) NOT NULL AUTO_INCREMENT,
-  `CID_ID_FK` int(11) NOT NULL,
-  `BAIRRO` varchar(50) NOT NULL,
-  `IBGE` int(11) NOT NULL,
-  PRIMARY KEY (`BRRS_ID`),
-  KEY `CID_ID_FK` (`CID_ID_FK`),
-  CONSTRAINT `cid_brrs` FOREIGN KEY (`CID_ID_FK`) REFERENCES `tbl_cidades` (`CID_ID`)
+  `id_bairro` int(11) NOT NULL AUTO_INCREMENT,
+  `fk_cidade` int(11) NOT NULL,
+  `bairro` varchar(50) NOT NULL,
+  `ibge` int(11) NOT NULL,
+  PRIMARY KEY (`id_bairro`),
+  KEY `fk_cidade` (`fk_cidade`),
+  CONSTRAINT `cidade_bairro` FOREIGN KEY (`fk_cidade`) REFERENCES `tbl_cidades` (`id_cidade`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=41 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -106,29 +72,30 @@ INSERT INTO `tbl_bairros` VALUES (1,11990,'Alvorada',99),(2,11990,'Araxá',99),(
 UNLOCK TABLES;
 
 --
--- Table structure for table `tbl_calendario`
+-- Table structure for table `tbl_calendarios`
 --
 
-DROP TABLE IF EXISTS `tbl_calendario`;
+DROP TABLE IF EXISTS `tbl_calendarios`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `tbl_calendario` (
+CREATE TABLE `tbl_calendarios` (
   `id_calendario` int(11) NOT NULL AUTO_INCREMENT,
-  `ano` int(11) DEFAULT NULL,
-  `periodo` int(11) DEFAULT NULL,
-  `data_inicio` date DEFAULT NULL,
-  `data_termino` date DEFAULT NULL,
+  `ano` int(11) NOT NULL,
+  `periodo` int(11) NOT NULL,
+  `data_inicio` date NOT NULL,
+  `data_termino` date NOT NULL,
   PRIMARY KEY (`id_calendario`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `tbl_calendario`
+-- Dumping data for table `tbl_calendarios`
 --
 
-LOCK TABLES `tbl_calendario` WRITE;
-/*!40000 ALTER TABLE `tbl_calendario` DISABLE KEYS */;
-/*!40000 ALTER TABLE `tbl_calendario` ENABLE KEYS */;
+LOCK TABLES `tbl_calendarios` WRITE;
+/*!40000 ALTER TABLE `tbl_calendarios` DISABLE KEYS */;
+INSERT INTO `tbl_calendarios` VALUES (1,2019,1,'2019-01-01','2019-06-05'),(2,2019,2,'2019-08-03','2019-12-21');
+/*!40000 ALTER TABLE `tbl_calendarios` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -139,14 +106,13 @@ DROP TABLE IF EXISTS `tbl_cidades`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `tbl_cidades` (
-  `CID_ID` int(11) NOT NULL AUTO_INCREMENT,
-  `CID_DESCRICAO` varchar(50) DEFAULT NULL,
-  `UF_ID_FK` int(11) NOT NULL,
-  `DRS_ID` varchar(50) DEFAULT NULL,
-  `CID_NUM_IBGE` varchar(50) DEFAULT NULL,
-  PRIMARY KEY (`CID_ID`),
-  KEY `UF_ID_FK` (`UF_ID_FK`),
-  CONSTRAINT `uf_cid` FOREIGN KEY (`UF_ID_FK`) REFERENCES `tbl_uf` (`UF_ID`)
+  `id_cidade` int(11) NOT NULL AUTO_INCREMENT,
+  `descricao_cidade` varchar(50) DEFAULT NULL,
+  `fk_uf` int(11) NOT NULL,
+  `numero_ibge` varchar(50) DEFAULT NULL,
+  PRIMARY KEY (`id_cidade`),
+  KEY `fk_uf` (`fk_uf`),
+  CONSTRAINT `uf_cidade` FOREIGN KEY (`fk_uf`) REFERENCES `tbl_ufs` (`id_uf`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=11999 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -156,103 +122,74 @@ CREATE TABLE `tbl_cidades` (
 
 LOCK TABLES `tbl_cidades` WRITE;
 /*!40000 ALTER TABLE `tbl_cidades` DISABLE KEYS */;
-INSERT INTO `tbl_cidades` VALUES (11983,'Pedra Branca do Amapari',4,NULL,'160015'),(11984,'Amapa',4,NULL,'160010'),(11985,'Calcoene',4,NULL,'160020'),(11986,'Cutias',4,NULL,'160021'),(11987,'Ferreira Gomes',4,NULL,'160023'),(11988,'Itaubal',4,NULL,'160025'),(11989,'Laranjal do Jari',4,NULL,'160027'),(11990,'Macapa',4,NULL,'160030'),(11991,'Mazagao',4,NULL,'160040'),(11992,'Oiapoque',4,NULL,'160050'),(11993,'Porto Grande',4,NULL,'160053'),(11994,'Pracuuba',4,NULL,'160055'),(11995,'Santana',4,NULL,'160060'),(11996,'Serra do Navio',4,NULL,'160005'),(11997,'Tartarugalzinho',4,NULL,'160070'),(11998,'Vitoria do Jari',4,NULL,'160080');
+INSERT INTO `tbl_cidades` VALUES (11983,'Pedra Branca do Amapari',4,'160015'),(11984,'Amapa',4,'160010'),(11985,'Calcoene',4,'160020'),(11986,'Cutias',4,'160021'),(11987,'Ferreira Gomes',4,'160023'),(11988,'Itaubal',4,'160025'),(11989,'Laranjal do Jari',4,'160027'),(11990,'Macapa',4,'160030'),(11991,'Mazagao',4,'160040'),(11992,'Oiapoque',4,'160050'),(11993,'Porto Grande',4,'160053'),(11994,'Pracuuba',4,'160055'),(11995,'Santana',4,'160060'),(11996,'Serra do Navio',4,'160005'),(11997,'Tartarugalzinho',4,'160070'),(11998,'Vitoria do Jari',4,'160080');
 /*!40000 ALTER TABLE `tbl_cidades` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Table structure for table `tbl_colegiado`
+-- Table structure for table `tbl_colegiados`
 --
 
-DROP TABLE IF EXISTS `tbl_colegiado`;
+DROP TABLE IF EXISTS `tbl_colegiados`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `tbl_colegiado` (
+CREATE TABLE `tbl_colegiados` (
   `id_colegiado` int(11) NOT NULL AUTO_INCREMENT,
   `fk_reitoria` int(11) DEFAULT NULL,
   `nome_colegiado` varchar(50) NOT NULL,
-  `cod_colegiado` varchar(10) NOT NULL,
+  `codigo_colegiado` varchar(10) NOT NULL,
   PRIMARY KEY (`id_colegiado`),
-  KEY `fk_reitoria` (`fk_reitoria`),
-  CONSTRAINT `tbl_colegiado_ibfk_1` FOREIGN KEY (`fk_reitoria`) REFERENCES `tbl_reitoria` (`id_reitoria`)
+  KEY `reitoria_colegiado` (`fk_reitoria`),
+  CONSTRAINT `reitoria_curso` FOREIGN KEY (`fk_reitoria`) REFERENCES `tbl_reitorias` (`id_reitoria`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `tbl_colegiado`
+-- Dumping data for table `tbl_colegiados`
 --
 
-LOCK TABLES `tbl_colegiado` WRITE;
-/*!40000 ALTER TABLE `tbl_colegiado` DISABLE KEYS */;
-INSERT INTO `tbl_colegiado` VALUES (1,NULL,'DEPARTAMENTO DE CIÊNCIAS EXATAS E TECNOLOGIAS','DCET'),(2,NULL,' DEPARTAMENTO DE CIÊNCIAS BIOLÓGICAS E DA SAÚDE','DCBS');
-/*!40000 ALTER TABLE `tbl_colegiado` ENABLE KEYS */;
+LOCK TABLES `tbl_colegiados` WRITE;
+/*!40000 ALTER TABLE `tbl_colegiados` DISABLE KEYS */;
+INSERT INTO `tbl_colegiados` VALUES (1,NULL,'Departamento de Ciências Exatas e Tecnológicas','DCET'),(2,NULL,'Departamento de Ciências Biológicas e da Saúde','DCBS');
+/*!40000 ALTER TABLE `tbl_colegiados` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Table structure for table `tbl_coordenacao`
+-- Table structure for table `tbl_coordenacoes`
 --
 
-DROP TABLE IF EXISTS `tbl_coordenacao`;
+DROP TABLE IF EXISTS `tbl_coordenacoes`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `tbl_coordenacao` (
-  `id_coordadenacao` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `tbl_coordenacoes` (
+  `id_coordenacao` int(11) NOT NULL AUTO_INCREMENT,
   `nome` varchar(120) DEFAULT NULL,
   `fk_curso` int(11) DEFAULT NULL,
   `fk_coordenador` int(11) DEFAULT NULL,
-  `fk_vicecoordenador` int(11) DEFAULT NULL,
-  `fk_tecnico_lab` int(11) DEFAULT NULL,
-  `fk_tecnico_adm` int(11) DEFAULT NULL,
-  PRIMARY KEY (`id_coordadenacao`),
-  KEY `fk_curso` (`fk_curso`),
-  KEY `fk_coordenador` (`fk_coordenador`),
-  KEY `fk_vicecoordenador` (`fk_vicecoordenador`),
-  KEY `fk_tecnico_lab` (`fk_tecnico_lab`),
-  KEY `fk_tecnico_adm` (`fk_tecnico_adm`),
-  CONSTRAINT `tbl_coordenacao_ibfk_1` FOREIGN KEY (`fk_curso`) REFERENCES `tbl_cursos` (`id_curso`),
-  CONSTRAINT `tbl_coordenacao_ibfk_2` FOREIGN KEY (`fk_coordenador`) REFERENCES `tbl_professor` (`id_prof`),
-  CONSTRAINT `tbl_coordenacao_ibfk_3` FOREIGN KEY (`fk_vicecoordenador`) REFERENCES `tbl_professor` (`id_prof`),
-  CONSTRAINT `tbl_coordenacao_ibfk_4` FOREIGN KEY (`fk_tecnico_lab`) REFERENCES `tbl_func_tecnico` (`id_tecnico`),
-  CONSTRAINT `tbl_coordenacao_ibfk_5` FOREIGN KEY (`fk_tecnico_adm`) REFERENCES `tbl_func_tecnico` (`id_tecnico`)
+  `fk_vice_coordenador` int(11) DEFAULT NULL,
+  `fk_tecnico_laboratorio` int(11) DEFAULT NULL,
+  `fk_tecnico_administrativo` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id_coordenacao`),
+  KEY `colegiado_coordenacao` (`fk_curso`),
+  KEY `coordenador` (`fk_coordenador`),
+  KEY `vice_coordenador` (`fk_vice_coordenador`),
+  KEY `tecnico_laboratorio` (`fk_tecnico_laboratorio`),
+  KEY `tecnico_administrativo` (`fk_tecnico_administrativo`),
+  CONSTRAINT `colegiado_coordenacao` FOREIGN KEY (`fk_curso`) REFERENCES `tbl_cursos` (`id_curso`),
+  CONSTRAINT `coordenador` FOREIGN KEY (`fk_coordenador`) REFERENCES `tbl_docentes` (`id_docente`),
+  CONSTRAINT `tecnico_administrativo` FOREIGN KEY (`fk_tecnico_administrativo`) REFERENCES `tbl_funcionarios_tecnicos` (`id_funcionario_tecnico`),
+  CONSTRAINT `tecnico_laboratorio` FOREIGN KEY (`fk_tecnico_laboratorio`) REFERENCES `tbl_funcionarios_tecnicos` (`id_funcionario_tecnico`),
+  CONSTRAINT `vice_coordenador` FOREIGN KEY (`fk_vice_coordenador`) REFERENCES `tbl_docentes` (`id_docente`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `tbl_coordenacao`
+-- Dumping data for table `tbl_coordenacoes`
 --
 
-LOCK TABLES `tbl_coordenacao` WRITE;
-/*!40000 ALTER TABLE `tbl_coordenacao` DISABLE KEYS */;
-/*!40000 ALTER TABLE `tbl_coordenacao` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `tbl_curso_discip`
---
-
-DROP TABLE IF EXISTS `tbl_curso_discip`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `tbl_curso_discip` (
-  `id_curso_discp` int(11) NOT NULL AUTO_INCREMENT,
-  `fk_curso` int(11) NOT NULL,
-  `fk_discip` int(11) NOT NULL,
-  PRIMARY KEY (`id_curso_discp`),
-  KEY `crurso_fk` (`fk_curso`),
-  KEY `disciplina_fk` (`fk_discip`),
-  CONSTRAINT `crurso_fk` FOREIGN KEY (`fk_curso`) REFERENCES `tbl_cursos` (`id_curso`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `disciplina_fk` FOREIGN KEY (`fk_discip`) REFERENCES `tbl_disciplina` (`id_disciplina`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `tbl_curso_discip`
---
-
-LOCK TABLES `tbl_curso_discip` WRITE;
-/*!40000 ALTER TABLE `tbl_curso_discip` DISABLE KEYS */;
-INSERT INTO `tbl_curso_discip` VALUES (1,3,3),(2,3,5);
-/*!40000 ALTER TABLE `tbl_curso_discip` ENABLE KEYS */;
+LOCK TABLES `tbl_coordenacoes` WRITE;
+/*!40000 ALTER TABLE `tbl_coordenacoes` DISABLE KEYS */;
+/*!40000 ALTER TABLE `tbl_coordenacoes` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -264,12 +201,12 @@ DROP TABLE IF EXISTS `tbl_cursos`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `tbl_cursos` (
   `id_curso` int(11) NOT NULL AUTO_INCREMENT,
-  `fk_coleg_curso` int(11) NOT NULL,
+  `fk_colegiado_curso` int(11) NOT NULL,
   `nome_curso` varchar(50) NOT NULL,
-  `cod_curso` varchar(10) NOT NULL,
+  `codigo_curso` varchar(10) NOT NULL,
   PRIMARY KEY (`id_curso`),
-  KEY `colegiado_curso` (`fk_coleg_curso`),
-  CONSTRAINT `colegiado_curso` FOREIGN KEY (`fk_coleg_curso`) REFERENCES `tbl_colegiado` (`id_colegiado`) ON DELETE CASCADE ON UPDATE CASCADE
+  KEY `colegiado_curso` (`fk_colegiado_curso`),
+  CONSTRAINT `colegiado_curso` FOREIGN KEY (`fk_colegiado_curso`) REFERENCES `tbl_colegiados` (`id_colegiado`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -279,547 +216,592 @@ CREATE TABLE `tbl_cursos` (
 
 LOCK TABLES `tbl_cursos` WRITE;
 /*!40000 ALTER TABLE `tbl_cursos` DISABLE KEYS */;
-INSERT INTO `tbl_cursos` VALUES (1,1,'ARQUITETURA E URBANISMO','ARQ.URB'),(2,1,'ENGENHARIA CIVIL','ENG.CIV'),(3,1,'CIÊNCIA DA COMPUTAÇÃO','C.C'),(4,1,'ENGENHARIA ELETRICA','ENG.ELET'),(5,1,'FISICA','FISICA'),(6,1,'MATEMATICA','MATEMATICA'),(7,1,'QUÍMICA','QUÍMICA'),(14,2,'CIENCIAS BIOLOGICAS','CIEN.BIOL'),(15,2,'ENFERMAGEM','ENFERMA'),(16,2,'FARMÁCIA','FARMA'),(17,2,'FISIOTERAPIA','FISIOTE'),(26,2,'MEDICINA','MEDICINA');
+INSERT INTO `tbl_cursos` VALUES (1,1,'Arquitetura e Urbanismo','Arq. Urb'),(2,1,'Engenharia Civil','Eng. Civ'),(3,1,'Ciência da Computação','C. C'),(4,1,'Engenharia Elétrica','Eng. Elet'),(5,1,'Física','Fis'),(6,1,'Matemática','Mat'),(7,1,'Química','Qui'),(14,2,'Ciências Biológicas','Cien. Bio'),(15,2,'Enfermagem','Enf'),(16,2,'Farmácia','Farma'),(17,2,'Fisioterapia','Fisio'),(26,2,'Medicina','Med');
 /*!40000 ALTER TABLE `tbl_cursos` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Table structure for table `tbl_ddd`
+-- Table structure for table `tbl_cursos_disciplinas`
 --
 
-DROP TABLE IF EXISTS `tbl_ddd`;
+DROP TABLE IF EXISTS `tbl_cursos_disciplinas`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `tbl_ddd` (
-  `id_ddd` int(11) NOT NULL AUTO_INCREMENT,
-  `regiao` varchar(100) DEFAULT NULL,
-  `fk_uf` int(11) NOT NULL,
-  PRIMARY KEY (`id_ddd`),
-  KEY `fk_uf` (`fk_uf`),
-  CONSTRAINT `tbl_ddd_ibfk_1` FOREIGN KEY (`fk_uf`) REFERENCES `tbl_uf` (`UF_ID`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `tbl_ddd`
---
-
-LOCK TABLES `tbl_ddd` WRITE;
-/*!40000 ALTER TABLE `tbl_ddd` DISABLE KEYS */;
-/*!40000 ALTER TABLE `tbl_ddd` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `tbl_disc_hist`
---
-
-DROP TABLE IF EXISTS `tbl_disc_hist`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `tbl_disc_hist` (
-  `id_disc_hist` int(11) NOT NULL AUTO_INCREMENT,
-  `fk_disc_hist` int(11) NOT NULL,
-  `fk_hist` int(11) NOT NULL,
-  `nota_disc_hist` float NOT NULL,
-  `frequencia_disc_hist` int(11) NOT NULL,
-  PRIMARY KEY (`id_disc_hist`),
-  KEY `disc_hist` (`fk_disc_hist`),
-  KEY `hist_disc_hist` (`fk_hist`),
-  CONSTRAINT `disc_hist` FOREIGN KEY (`fk_disc_hist`) REFERENCES `tbl_disciplina` (`id_disciplina`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `hist_disc_hist` FOREIGN KEY (`fk_hist`) REFERENCES `tbl_historico` (`id_historico`) ON DELETE CASCADE ON UPDATE CASCADE
+CREATE TABLE `tbl_cursos_disciplinas` (
+  `id_curso_disciplina` int(11) NOT NULL AUTO_INCREMENT,
+  `fk_curso` int(11) NOT NULL,
+  `fk_disciplina` int(11) NOT NULL,
+  PRIMARY KEY (`id_curso_disciplina`),
+  KEY `curso_disciplina` (`fk_curso`),
+  KEY `disciplina_curso` (`fk_disciplina`),
+  CONSTRAINT `curso_disciplina` FOREIGN KEY (`fk_curso`) REFERENCES `tbl_cursos` (`id_curso`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `disciplina_curso` FOREIGN KEY (`fk_disciplina`) REFERENCES `tbl_disciplinas` (`id_disciplina`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `tbl_disc_hist`
+-- Dumping data for table `tbl_cursos_disciplinas`
 --
 
-LOCK TABLES `tbl_disc_hist` WRITE;
-/*!40000 ALTER TABLE `tbl_disc_hist` DISABLE KEYS */;
-INSERT INTO `tbl_disc_hist` VALUES (1,5,1,9,0),(2,3,1,9,0);
-/*!40000 ALTER TABLE `tbl_disc_hist` ENABLE KEYS */;
+LOCK TABLES `tbl_cursos_disciplinas` WRITE;
+/*!40000 ALTER TABLE `tbl_cursos_disciplinas` DISABLE KEYS */;
+INSERT INTO `tbl_cursos_disciplinas` VALUES (1,3,3),(2,3,5);
+/*!40000 ALTER TABLE `tbl_cursos_disciplinas` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Table structure for table `tbl_disciplina`
+-- Table structure for table `tbl_ddds`
 --
 
-DROP TABLE IF EXISTS `tbl_disciplina`;
+DROP TABLE IF EXISTS `tbl_ddds`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `tbl_disciplina` (
+CREATE TABLE `tbl_ddds` (
+  `id_ddd` int(11) NOT NULL AUTO_INCREMENT,
+  `ddd` int(11) NOT NULL,
+  `fk_uf` int(11) NOT NULL,
+  PRIMARY KEY (`id_ddd`),
+  KEY `uf_ddd` (`fk_uf`),
+  CONSTRAINT `uf_ddd` FOREIGN KEY (`fk_uf`) REFERENCES `tbl_ufs` (`id_uf`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tbl_ddds`
+--
+
+LOCK TABLES `tbl_ddds` WRITE;
+/*!40000 ALTER TABLE `tbl_ddds` DISABLE KEYS */;
+INSERT INTO `tbl_ddds` VALUES (1,96,4);
+/*!40000 ALTER TABLE `tbl_ddds` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `tbl_discentes`
+--
+
+DROP TABLE IF EXISTS `tbl_discentes`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `tbl_discentes` (
+  `id_discente` int(11) NOT NULL AUTO_INCREMENT,
+  `fk_usuario_discente` int(11) NOT NULL,
+  `fk_curso_discente` int(11) NOT NULL,
+  `fk_turma_discente` int(11) NOT NULL,
+  `ano_inicio` int(11) NOT NULL,
+  PRIMARY KEY (`id_discente`),
+  KEY `usuario_discente` (`fk_usuario_discente`),
+  KEY `turma_discente` (`fk_turma_discente`),
+  KEY `curso_discente` (`fk_curso_discente`),
+  CONSTRAINT `curso_discente` FOREIGN KEY (`fk_curso_discente`) REFERENCES `tbl_cursos` (`id_curso`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `turma_discente` FOREIGN KEY (`fk_turma_discente`) REFERENCES `tbl_turmas` (`id_turma`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `usuario_discente` FOREIGN KEY (`fk_usuario_discente`) REFERENCES `tbl_usuarios` (`id_usuario`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tbl_discentes`
+--
+
+LOCK TABLES `tbl_discentes` WRITE;
+/*!40000 ALTER TABLE `tbl_discentes` DISABLE KEYS */;
+INSERT INTO `tbl_discentes` VALUES (1,1,3,1,2018);
+/*!40000 ALTER TABLE `tbl_discentes` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `tbl_discentes_disciplinas`
+--
+
+DROP TABLE IF EXISTS `tbl_discentes_disciplinas`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `tbl_discentes_disciplinas` (
+  `id_discente_disciplina` int(11) NOT NULL AUTO_INCREMENT,
+  `fk_discente` int(11) NOT NULL,
+  `fk_disciplina` int(11) NOT NULL,
+  PRIMARY KEY (`id_discente_disciplina`),
+  KEY `discente_disciplina` (`fk_discente`),
+  KEY `disciplina_discente` (`fk_disciplina`),
+  CONSTRAINT `discente_disciplina` FOREIGN KEY (`fk_discente`) REFERENCES `tbl_discentes` (`id_discente`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `disciplina_discente` FOREIGN KEY (`fk_disciplina`) REFERENCES `tbl_disciplinas` (`id_disciplina`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tbl_discentes_disciplinas`
+--
+
+LOCK TABLES `tbl_discentes_disciplinas` WRITE;
+/*!40000 ALTER TABLE `tbl_discentes_disciplinas` DISABLE KEYS */;
+INSERT INTO `tbl_discentes_disciplinas` VALUES (1,1,3),(2,1,5);
+/*!40000 ALTER TABLE `tbl_discentes_disciplinas` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `tbl_disciplinas`
+--
+
+DROP TABLE IF EXISTS `tbl_disciplinas`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `tbl_disciplinas` (
   `id_disciplina` int(11) NOT NULL AUTO_INCREMENT,
-  `fk_depende_discipl` int(11) NOT NULL,
-  `nome_discipl` varchar(50) NOT NULL,
-  `carga_hora_disc` int(11) NOT NULL,
-  `num_aluno_disc` int(11) NOT NULL,
+  `fk_disciplina` int(11) NOT NULL,
+  `nome_disciplina` varchar(50) NOT NULL,
+  `carga_horaria_disciplina` int(11) NOT NULL,
+  `numero_discentes_disciplina` int(11) NOT NULL,
   PRIMARY KEY (`id_disciplina`),
-  KEY `disc_disc` (`fk_depende_discipl`)
+  KEY `disciplina_disciplina` (`fk_disciplina`),
+  CONSTRAINT `disciplina_disciplina` FOREIGN KEY (`fk_disciplina`) REFERENCES `tbl_disciplinas` (`id_disciplina`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `tbl_disciplina`
+-- Dumping data for table `tbl_disciplinas`
 --
 
-LOCK TABLES `tbl_disciplina` WRITE;
-/*!40000 ALTER TABLE `tbl_disciplina` DISABLE KEYS */;
-INSERT INTO `tbl_disciplina` VALUES (3,0,'Banco de dados I',90,30),(4,3,'Banco de dados II',90,30),(5,0,'cálculo I',90,30),(6,5,'cálculo II',120,30);
-/*!40000 ALTER TABLE `tbl_disciplina` ENABLE KEYS */;
+LOCK TABLES `tbl_disciplinas` WRITE;
+/*!40000 ALTER TABLE `tbl_disciplinas` DISABLE KEYS */;
+INSERT INTO `tbl_disciplinas` VALUES (1,1,'Nenhum',0,0),(3,1,'Banco de Dados I',90,30),(4,3,'Banco de Dados II',90,30),(5,1,'Cálculo I',90,30),(6,5,'Cálculo II',120,30);
+/*!40000 ALTER TABLE `tbl_disciplinas` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Table structure for table `tbl_end`
+-- Table structure for table `tbl_disciplinas_historicos`
 --
 
-DROP TABLE IF EXISTS `tbl_end`;
+DROP TABLE IF EXISTS `tbl_disciplinas_historicos`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `tbl_end` (
-  `id_end` int(11) NOT NULL AUTO_INCREMENT,
-  `fk_user_end` int(11) NOT NULL,
-  `kf_lograd` int(11) NOT NULL,
+CREATE TABLE `tbl_disciplinas_historicos` (
+  `id_disciplina_historico` int(11) NOT NULL AUTO_INCREMENT,
+  `fk_disciplina` int(11) NOT NULL,
+  `fk_historico` int(11) NOT NULL,
+  `nota_disciplina` float NOT NULL,
+  `frequencia_disciplina` int(11) NOT NULL,
+  PRIMARY KEY (`id_disciplina_historico`),
+  KEY `disciplina_historico` (`fk_disciplina`),
+  KEY `historico_disciplina` (`fk_historico`),
+  CONSTRAINT `disciplina_historico` FOREIGN KEY (`fk_disciplina`) REFERENCES `tbl_disciplinas` (`id_disciplina`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `historico_disciplina` FOREIGN KEY (`fk_historico`) REFERENCES `tbl_historicos` (`id_historico`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tbl_disciplinas_historicos`
+--
+
+LOCK TABLES `tbl_disciplinas_historicos` WRITE;
+/*!40000 ALTER TABLE `tbl_disciplinas_historicos` DISABLE KEYS */;
+INSERT INTO `tbl_disciplinas_historicos` VALUES (1,5,1,9,0),(2,3,1,9,0);
+/*!40000 ALTER TABLE `tbl_disciplinas_historicos` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `tbl_docentes`
+--
+
+DROP TABLE IF EXISTS `tbl_docentes`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `tbl_docentes` (
+  `id_docente` int(11) NOT NULL AUTO_INCREMENT,
+  `fk_usuario_docente` int(11) NOT NULL,
+  `fk_funcionario_docente` int(11) DEFAULT NULL,
+  `fk_colegiado_docente` int(11) NOT NULL,
+  `situacao_docente` int(11) NOT NULL,
+  PRIMARY KEY (`id_docente`),
+  KEY `usuario_docente` (`fk_usuario_docente`),
+  KEY `colegiado_professor` (`fk_colegiado_docente`),
+  KEY `funcionario_docente` (`fk_funcionario_docente`),
+  CONSTRAINT `colegiado_professor` FOREIGN KEY (`fk_colegiado_docente`) REFERENCES `tbl_colegiados` (`id_colegiado`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `funcionario_docente` FOREIGN KEY (`fk_funcionario_docente`) REFERENCES `tbl_funcionarios` (`id_funcionario`),
+  CONSTRAINT `usuario_docente` FOREIGN KEY (`fk_usuario_docente`) REFERENCES `tbl_usuarios` (`id_usuario`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tbl_docentes`
+--
+
+LOCK TABLES `tbl_docentes` WRITE;
+/*!40000 ALTER TABLE `tbl_docentes` DISABLE KEYS */;
+INSERT INTO `tbl_docentes` VALUES (1,4,1,1,2);
+/*!40000 ALTER TABLE `tbl_docentes` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `tbl_docentes_disciplinas`
+--
+
+DROP TABLE IF EXISTS `tbl_docentes_disciplinas`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `tbl_docentes_disciplinas` (
+  `id_docente_disciplina` int(11) NOT NULL AUTO_INCREMENT,
+  `fk_docente` int(11) NOT NULL,
+  `fk_disciplina` int(11) NOT NULL,
+  PRIMARY KEY (`id_docente_disciplina`),
+  KEY `docente_disciplina` (`fk_docente`),
+  KEY `disciplina_docente` (`fk_disciplina`),
+  CONSTRAINT `disciplina_docente` FOREIGN KEY (`fk_disciplina`) REFERENCES `tbl_disciplinas` (`id_disciplina`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `docente_disciplina` FOREIGN KEY (`fk_docente`) REFERENCES `tbl_docentes` (`id_docente`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tbl_docentes_disciplinas`
+--
+
+LOCK TABLES `tbl_docentes_disciplinas` WRITE;
+/*!40000 ALTER TABLE `tbl_docentes_disciplinas` DISABLE KEYS */;
+INSERT INTO `tbl_docentes_disciplinas` VALUES (1,1,3),(2,1,5);
+/*!40000 ALTER TABLE `tbl_docentes_disciplinas` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `tbl_enderecos`
+--
+
+DROP TABLE IF EXISTS `tbl_enderecos`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `tbl_enderecos` (
+  `id_endereco` int(11) NOT NULL AUTO_INCREMENT,
+  `fk_usuario` int(11) NOT NULL,
   `fk_rua` int(11) NOT NULL,
-  `n_casa` varchar(15) NOT NULL,
-  `complemento` varchar(20) NOT NULL,
-  PRIMARY KEY (`id_end`),
-  KEY `user_end` (`fk_user_end`),
-  KEY `bairro_end` (`fk_rua`),
-  KEY `log_end` (`kf_lograd`),
-  CONSTRAINT `log_end` FOREIGN KEY (`kf_lograd`) REFERENCES `tbl_logradouro` (`LOGRAD_ID`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `rua_end` FOREIGN KEY (`fk_rua`) REFERENCES `tbl_rua` (`id_rua`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `user_end` FOREIGN KEY (`fk_user_end`) REFERENCES `tbl_user` (`id_user`) ON DELETE CASCADE ON UPDATE CASCADE
+  `numero_casa` int(11) NOT NULL,
+  `complemento_casa` varchar(20) NOT NULL,
+  PRIMARY KEY (`id_endereco`),
+  KEY `usuario_endereco` (`fk_usuario`),
+  KEY `bairro_endereco` (`fk_rua`),
+  CONSTRAINT `rua_endereco` FOREIGN KEY (`fk_rua`) REFERENCES `tbl_ruas` (`id_rua`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `usuario_endereco` FOREIGN KEY (`fk_usuario`) REFERENCES `tbl_usuarios` (`id_usuario`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `tbl_end`
+-- Dumping data for table `tbl_enderecos`
 --
 
-LOCK TABLES `tbl_end` WRITE;
-/*!40000 ALTER TABLE `tbl_end` DISABLE KEYS */;
-INSERT INTO `tbl_end` VALUES (5,1,7,1,'660','casa'),(6,2,1,2,'896a','');
-/*!40000 ALTER TABLE `tbl_end` ENABLE KEYS */;
+LOCK TABLES `tbl_enderecos` WRITE;
+/*!40000 ALTER TABLE `tbl_enderecos` DISABLE KEYS */;
+INSERT INTO `tbl_enderecos` VALUES (5,1,1,660,''),(6,2,2,896,'a');
+/*!40000 ALTER TABLE `tbl_enderecos` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Table structure for table `tbl_especialidade`
+-- Table structure for table `tbl_especialidades`
 --
 
-DROP TABLE IF EXISTS `tbl_especialidade`;
+DROP TABLE IF EXISTS `tbl_especialidades`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `tbl_especialidade` (
+CREATE TABLE `tbl_especialidades` (
   `id_especialidade` int(11) NOT NULL AUTO_INCREMENT,
   `area` varchar(100) DEFAULT NULL,
   `grau` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`id_especialidade`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `tbl_especialidade`
+-- Dumping data for table `tbl_especialidades`
 --
 
-LOCK TABLES `tbl_especialidade` WRITE;
-/*!40000 ALTER TABLE `tbl_especialidade` DISABLE KEYS */;
-/*!40000 ALTER TABLE `tbl_especialidade` ENABLE KEYS */;
+LOCK TABLES `tbl_especialidades` WRITE;
+/*!40000 ALTER TABLE `tbl_especialidades` DISABLE KEYS */;
+INSERT INTO `tbl_especialidades` VALUES (1,'Engenharia de Software','Especialização');
+/*!40000 ALTER TABLE `tbl_especialidades` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Table structure for table `tbl_func_analista`
+-- Table structure for table `tbl_funcionarios`
 --
 
-DROP TABLE IF EXISTS `tbl_func_analista`;
+DROP TABLE IF EXISTS `tbl_funcionarios`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `tbl_func_analista` (
-  `id_analista` int(11) NOT NULL AUTO_INCREMENT,
-  `salario` decimal(8,2) DEFAULT NULL,
-  `fk_user` int(11) DEFAULT NULL,
-  `fk_lotacao` int(11) DEFAULT NULL,
-  `fk_funcionario` int(11) DEFAULT NULL,
-  `fk_especialidade` int(11) DEFAULT NULL,
-  PRIMARY KEY (`id_analista`),
-  KEY `fk_lotacao` (`fk_lotacao`),
-  KEY `fk_user` (`fk_user`),
-  KEY `fk_especialidade` (`fk_especialidade`),
-  KEY `fk_funcionario` (`fk_funcionario`),
-  CONSTRAINT `tbl_func_analista_ibfk_1` FOREIGN KEY (`fk_lotacao`) REFERENCES `tbl_colegiado` (`id_colegiado`),
-  CONSTRAINT `tbl_func_analista_ibfk_2` FOREIGN KEY (`fk_user`) REFERENCES `tbl_user` (`id_user`),
-  CONSTRAINT `tbl_func_analista_ibfk_3` FOREIGN KEY (`fk_especialidade`) REFERENCES `tbl_especialidade` (`id_especialidade`),
-  CONSTRAINT `tbl_func_analista_ibfk_4` FOREIGN KEY (`fk_funcionario`) REFERENCES `tbl_funcionario` (`id_funcionario`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `tbl_func_analista`
---
-
-LOCK TABLES `tbl_func_analista` WRITE;
-/*!40000 ALTER TABLE `tbl_func_analista` DISABLE KEYS */;
-/*!40000 ALTER TABLE `tbl_func_analista` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `tbl_func_professor`
---
-
-DROP TABLE IF EXISTS `tbl_func_professor`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `tbl_func_professor` (
-  `id_professor` int(11) NOT NULL AUTO_INCREMENT,
-  `categoria` varchar(32) DEFAULT NULL,
-  `regime` varchar(100) DEFAULT NULL,
-  `salario` decimal(8,2) DEFAULT NULL,
-  `fk_funcionario` int(11) DEFAULT NULL,
-  `fk_especialidade` int(11) DEFAULT NULL,
-  PRIMARY KEY (`id_professor`),
-  KEY `fk_funcionario` (`fk_funcionario`),
-  KEY `fk_especialidade` (`fk_especialidade`),
-  CONSTRAINT `tbl_func_professor_ibfk_1` FOREIGN KEY (`fk_funcionario`) REFERENCES `tbl_funcionario` (`id_funcionario`),
-  CONSTRAINT `tbl_func_professor_ibfk_2` FOREIGN KEY (`fk_especialidade`) REFERENCES `tbl_especialidade` (`id_especialidade`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `tbl_func_professor`
---
-
-LOCK TABLES `tbl_func_professor` WRITE;
-/*!40000 ALTER TABLE `tbl_func_professor` DISABLE KEYS */;
-/*!40000 ALTER TABLE `tbl_func_professor` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `tbl_func_tecnico`
---
-
-DROP TABLE IF EXISTS `tbl_func_tecnico`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `tbl_func_tecnico` (
-  `id_tecnico` int(11) NOT NULL AUTO_INCREMENT,
-  `salario` decimal(8,2) DEFAULT NULL,
-  `fk_lotacao` int(11) DEFAULT NULL,
-  `fk_funcionario` int(11) DEFAULT NULL,
-  `fk_user` int(11) DEFAULT NULL,
-  PRIMARY KEY (`id_tecnico`),
-  KEY `fk_user` (`fk_user`),
-  KEY `fk_lotacao` (`fk_lotacao`),
-  KEY `fk_funcionario` (`fk_funcionario`),
-  CONSTRAINT `tbl_func_tecnico_ibfk_1` FOREIGN KEY (`fk_user`) REFERENCES `tbl_user` (`id_user`),
-  CONSTRAINT `tbl_func_tecnico_ibfk_2` FOREIGN KEY (`fk_lotacao`) REFERENCES `tbl_colegiado` (`id_colegiado`),
-  CONSTRAINT `tbl_func_tecnico_ibfk_3` FOREIGN KEY (`fk_funcionario`) REFERENCES `tbl_funcionario` (`id_funcionario`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `tbl_func_tecnico`
---
-
-LOCK TABLES `tbl_func_tecnico` WRITE;
-/*!40000 ALTER TABLE `tbl_func_tecnico` DISABLE KEYS */;
-/*!40000 ALTER TABLE `tbl_func_tecnico` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `tbl_funcionario`
---
-
-DROP TABLE IF EXISTS `tbl_funcionario`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `tbl_funcionario` (
+CREATE TABLE `tbl_funcionarios` (
   `id_funcionario` int(11) NOT NULL AUTO_INCREMENT,
   `vinculo` varchar(54) DEFAULT NULL,
   `carga_horaria` varchar(4) DEFAULT NULL,
   `data_admissao` date DEFAULT NULL,
   `data_demissao` date DEFAULT NULL,
   PRIMARY KEY (`id_funcionario`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `tbl_funcionario`
---
-
-LOCK TABLES `tbl_funcionario` WRITE;
-/*!40000 ALTER TABLE `tbl_funcionario` DISABLE KEYS */;
-/*!40000 ALTER TABLE `tbl_funcionario` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `tbl_historico`
---
-
-DROP TABLE IF EXISTS `tbl_historico`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `tbl_historico` (
-  `id_historico` int(11) NOT NULL AUTO_INCREMENT,
-  `fk_aluno_hist` int(11) NOT NULL,
-  `data_inicio` date NOT NULL,
-  `data_fim` date NOT NULL,
-  PRIMARY KEY (`id_historico`),
-  KEY `aluno_histo` (`fk_aluno_hist`),
-  CONSTRAINT `aluno_histo` FOREIGN KEY (`fk_aluno_hist`) REFERENCES `tbl_aluno` (`id_aluno`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `tbl_historico`
+-- Dumping data for table `tbl_funcionarios`
 --
 
-LOCK TABLES `tbl_historico` WRITE;
-/*!40000 ALTER TABLE `tbl_historico` DISABLE KEYS */;
-INSERT INTO `tbl_historico` VALUES (1,1,'2018-05-01','2021-12-06');
-/*!40000 ALTER TABLE `tbl_historico` ENABLE KEYS */;
+LOCK TABLES `tbl_funcionarios` WRITE;
+/*!40000 ALTER TABLE `tbl_funcionarios` DISABLE KEYS */;
+INSERT INTO `tbl_funcionarios` VALUES (1,'Enquadramento Funcional','8h','2018-06-29','2019-12-12');
+/*!40000 ALTER TABLE `tbl_funcionarios` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Table structure for table `tbl_login`
+-- Table structure for table `tbl_funcionarios_analistas`
 --
 
-DROP TABLE IF EXISTS `tbl_login`;
+DROP TABLE IF EXISTS `tbl_funcionarios_analistas`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `tbl_login` (
-  `id_login` int(11) NOT NULL AUTO_INCREMENT,
-  `fk_user` int(11) DEFAULT NULL,
-  `login` varchar(64) DEFAULT NULL,
-  `senha` varchar(64) DEFAULT NULL,
-  PRIMARY KEY (`id_login`),
-  KEY `fk_user` (`fk_user`),
-  CONSTRAINT `tbl_login_ibfk_1` FOREIGN KEY (`fk_user`) REFERENCES `tbl_user` (`id_user`)
+CREATE TABLE `tbl_funcionarios_analistas` (
+  `id_funcionario_analista` int(11) NOT NULL AUTO_INCREMENT,
+  `salario` decimal(8,2) DEFAULT NULL,
+  `fk_usuario` int(11) DEFAULT NULL,
+  `fk_colegiado` int(11) DEFAULT NULL,
+  `fk_funcionario` int(11) DEFAULT NULL,
+  `fk_especialidade` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id_funcionario_analista`),
+  KEY `colegiado_analista` (`fk_colegiado`),
+  KEY `usuario_analista` (`fk_usuario`),
+  KEY `especialidade_analista` (`fk_especialidade`),
+  KEY `funcionario_analista` (`fk_funcionario`),
+  CONSTRAINT `colegiado_analista` FOREIGN KEY (`fk_colegiado`) REFERENCES `tbl_colegiados` (`id_colegiado`),
+  CONSTRAINT `especialidade_analista` FOREIGN KEY (`fk_especialidade`) REFERENCES `tbl_especialidades` (`id_especialidade`),
+  CONSTRAINT `funcionario_analista` FOREIGN KEY (`fk_funcionario`) REFERENCES `tbl_funcionarios` (`id_funcionario`),
+  CONSTRAINT `usuario_analista` FOREIGN KEY (`fk_usuario`) REFERENCES `tbl_usuarios` (`id_usuario`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `tbl_login`
+-- Dumping data for table `tbl_funcionarios_analistas`
 --
 
-LOCK TABLES `tbl_login` WRITE;
-/*!40000 ALTER TABLE `tbl_login` DISABLE KEYS */;
-/*!40000 ALTER TABLE `tbl_login` ENABLE KEYS */;
+LOCK TABLES `tbl_funcionarios_analistas` WRITE;
+/*!40000 ALTER TABLE `tbl_funcionarios_analistas` DISABLE KEYS */;
+/*!40000 ALTER TABLE `tbl_funcionarios_analistas` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Table structure for table `tbl_logradouro`
+-- Table structure for table `tbl_funcionarios_docentes`
 --
 
-DROP TABLE IF EXISTS `tbl_logradouro`;
+DROP TABLE IF EXISTS `tbl_funcionarios_docentes`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `tbl_logradouro` (
-  `LOGRAD_ID` int(11) NOT NULL AUTO_INCREMENT,
-  `LOGRAD_DESCRICAO` varchar(15) NOT NULL,
-  `LOGRAD` varchar(7) NOT NULL,
-  PRIMARY KEY (`LOGRAD_ID`)
+CREATE TABLE `tbl_funcionarios_docentes` (
+  `id_funcionario_docente` int(11) NOT NULL AUTO_INCREMENT,
+  `categoria` varchar(32) DEFAULT NULL,
+  `regime` varchar(100) DEFAULT NULL,
+  `salario` decimal(8,2) DEFAULT NULL,
+  `fk_especialidade` int(11) DEFAULT NULL,
+  `fk_funcionario` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id_funcionario_docente`),
+  KEY `especialidade_docente` (`fk_especialidade`),
+  KEY `funcionario_docente_relacao` (`fk_funcionario`),
+  CONSTRAINT `especialidade_docente` FOREIGN KEY (`fk_especialidade`) REFERENCES `tbl_especialidades` (`id_especialidade`),
+  CONSTRAINT `funcionario_docente_relacao` FOREIGN KEY (`fk_funcionario`) REFERENCES `tbl_funcionarios` (`id_funcionario`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tbl_funcionarios_docentes`
+--
+
+LOCK TABLES `tbl_funcionarios_docentes` WRITE;
+/*!40000 ALTER TABLE `tbl_funcionarios_docentes` DISABLE KEYS */;
+INSERT INTO `tbl_funcionarios_docentes` VALUES (1,'C','Dediação Exclusiva',3.00,1,1);
+/*!40000 ALTER TABLE `tbl_funcionarios_docentes` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `tbl_funcionarios_tecnicos`
+--
+
+DROP TABLE IF EXISTS `tbl_funcionarios_tecnicos`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `tbl_funcionarios_tecnicos` (
+  `id_funcionario_tecnico` int(11) NOT NULL AUTO_INCREMENT,
+  `salario` decimal(8,2) DEFAULT NULL,
+  `fk_colegiado` int(11) DEFAULT NULL,
+  `fk_funcionario` int(11) DEFAULT NULL,
+  `fk_usuario` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id_funcionario_tecnico`),
+  KEY `colegiado_tecnico` (`fk_colegiado`),
+  KEY `funcionario_tecnico` (`fk_funcionario`),
+  KEY `usuario_tecnico` (`fk_usuario`),
+  CONSTRAINT `colegiado_tecnico` FOREIGN KEY (`fk_colegiado`) REFERENCES `tbl_colegiados` (`id_colegiado`),
+  CONSTRAINT `funcionario_tecnico` FOREIGN KEY (`fk_funcionario`) REFERENCES `tbl_funcionarios` (`id_funcionario`),
+  CONSTRAINT `usuario_tecnico` FOREIGN KEY (`fk_usuario`) REFERENCES `tbl_usuarios` (`id_usuario`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tbl_funcionarios_tecnicos`
+--
+
+LOCK TABLES `tbl_funcionarios_tecnicos` WRITE;
+/*!40000 ALTER TABLE `tbl_funcionarios_tecnicos` DISABLE KEYS */;
+/*!40000 ALTER TABLE `tbl_funcionarios_tecnicos` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `tbl_historicos`
+--
+
+DROP TABLE IF EXISTS `tbl_historicos`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `tbl_historicos` (
+  `id_historico` int(11) NOT NULL AUTO_INCREMENT,
+  `fk_discente` int(11) NOT NULL,
+  `data_inicio` date NOT NULL,
+  `data_fim` date NOT NULL,
+  PRIMARY KEY (`id_historico`),
+  KEY `historico_discente` (`fk_discente`),
+  CONSTRAINT `historico_discente` FOREIGN KEY (`fk_discente`) REFERENCES `tbl_discentes` (`id_discente`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tbl_historicos`
+--
+
+LOCK TABLES `tbl_historicos` WRITE;
+/*!40000 ALTER TABLE `tbl_historicos` DISABLE KEYS */;
+INSERT INTO `tbl_historicos` VALUES (1,1,'2018-05-01','2021-12-06');
+/*!40000 ALTER TABLE `tbl_historicos` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `tbl_logradouros`
+--
+
+DROP TABLE IF EXISTS `tbl_logradouros`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `tbl_logradouros` (
+  `id_logradouro` int(11) NOT NULL AUTO_INCREMENT,
+  `descricao_logradouro` varchar(15) NOT NULL,
+  `logradouro` varchar(7) NOT NULL,
+  PRIMARY KEY (`id_logradouro`)
 ) ENGINE=InnoDB AUTO_INCREMENT=45 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `tbl_logradouro`
+-- Dumping data for table `tbl_logradouros`
 --
 
-LOCK TABLES `tbl_logradouro` WRITE;
-/*!40000 ALTER TABLE `tbl_logradouro` DISABLE KEYS */;
-INSERT INTO `tbl_logradouro` VALUES (1,'AEROPORTO','AERO'),(2,'ALAMEDA','ALM'),(3,'AVENIDA','AV'),(4,'CAMPO','CMP'),(5,'CHÁCARA','CHAC'),(6,'COLÔNIA','COL'),(7,'CONDÓMINIO','COND'),(8,'CONJUNTO','CONJ'),(9,'DESTRITO','DESTRI'),(10,'CHÁCARA','CHAC'),(11,'ESPLANADA','ESPL'),(12,'ESTAÇÃO','EST'),(13,'ESTRADA','ESTR'),(14,'FAVALA','FAV'),(15,'FEIRA','FEIR'),(16,'JARDIM','JARD'),(17,'LADEIRA','LAD'),(18,'LAGO','LAGO'),(19,'LAGOA','LAGOA'),(20,'LARGO','LARGO'),(21,'LOTEAMENTO','LOTE'),(22,'MORRO','MORRO'),(23,'NÚCLEO','NUCL'),(24,'PARQUE','PARQ'),(25,'PASSARELA','PASSA'),(26,'PRAÇA','PRAÇA'),(27,'PÁTIO','PÁTIO'),(28,'QUADRA','QUAD'),(29,'RECANTO','RECAN'),(30,'RESIDENCIAL','RESID'),(31,'RODOVIA','ROD'),(32,'RUA','RUA'),(33,'SERTOR','SERTOR'),(34,'SÍTIO','SÍTIO'),(35,'TRAVESSA','TRAV'),(36,'TRECHO','TREC'),(37,'TREVO','TREV'),(38,'VALE','VALE'),(39,'VEREDA','VERE'),(40,'VIA','VIA'),(41,'VIADUTO','VIADU'),(42,'VIELA','VIELA'),(43,'VILA','VILA'),(44,'ÁREA','ÁREA');
-/*!40000 ALTER TABLE `tbl_logradouro` ENABLE KEYS */;
+LOCK TABLES `tbl_logradouros` WRITE;
+/*!40000 ALTER TABLE `tbl_logradouros` DISABLE KEYS */;
+INSERT INTO `tbl_logradouros` VALUES (1,'Aeroporto','Aero'),(2,'Alameda','Alm'),(3,'Avenida','Av'),(4,'Campo','Cmp'),(5,'Chácara','Chac'),(6,'Colônia','Col'),(7,'Condominio','Cond'),(8,'Conjunto','Conj'),(9,'Destrito','Destri'),(10,'Chácara','Chac'),(11,'Esplanada','Espl'),(12,'Estação','Est'),(13,'Estrada','Estr'),(14,'Favala','Fav'),(15,'Feira','Feir'),(16,'Jardim','Jard'),(17,'Ladeira','Lad'),(18,'Lago','Lago'),(19,'Lagoa','Lagoa'),(20,'Largo','Largo'),(21,'Loteamento','Lote'),(22,'Morro','Morro'),(23,'Núcleo','Nucl'),(24,'Parque','Parq'),(25,'Passarela','Passa'),(26,'Praça','Praça'),(27,'Pátio','Pátio'),(28,'Quadra','Quad'),(29,'Recanto','Recan'),(30,'Residencial','Resid'),(31,'Rodovia','Rod'),(32,'Rua','Rua'),(33,'Sertor','Sertor'),(34,'Sítio','Sítio'),(35,'Travessa','Trav'),(36,'Trecho','Trec'),(37,'Trevo','Trev'),(38,'Vale','Vale'),(39,'Vereda','Vere'),(40,'Via','Via'),(41,'Viaduto','Viadu'),(42,'Viela','Viela'),(43,'Vila','Vila'),(44,'Área','Área');
+/*!40000 ALTER TABLE `tbl_logradouros` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Table structure for table `tbl_prof_disc`
+-- Table structure for table `tbl_reitorias`
 --
 
-DROP TABLE IF EXISTS `tbl_prof_disc`;
+DROP TABLE IF EXISTS `tbl_reitorias`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `tbl_prof_disc` (
-  `id_prof_disc` int(11) NOT NULL AUTO_INCREMENT,
-  `fk_professor` int(11) NOT NULL,
-  `fk_discip_prof` int(11) NOT NULL,
-  PRIMARY KEY (`id_prof_disc`),
-  KEY `professor_fk` (`fk_professor`),
-  KEY `disciplina_prof_fk` (`fk_discip_prof`),
-  CONSTRAINT `disciplina_prof_fk` FOREIGN KEY (`fk_discip_prof`) REFERENCES `tbl_disciplina` (`id_disciplina`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `professor_fk` FOREIGN KEY (`fk_professor`) REFERENCES `tbl_professor` (`id_prof`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `tbl_prof_disc`
---
-
-LOCK TABLES `tbl_prof_disc` WRITE;
-/*!40000 ALTER TABLE `tbl_prof_disc` DISABLE KEYS */;
-INSERT INTO `tbl_prof_disc` VALUES (1,1,3),(2,1,5);
-/*!40000 ALTER TABLE `tbl_prof_disc` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `tbl_professor`
---
-
-DROP TABLE IF EXISTS `tbl_professor`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `tbl_professor` (
-  `id_prof` int(11) NOT NULL AUTO_INCREMENT,
-  `fk_user_prof` int(11) NOT NULL,
-  `fk_funcionario_prof` int(11) DEFAULT NULL,
-  `fk_coleg_prof` int(11) NOT NULL,
-  `status_prof` int(11) NOT NULL,
-  PRIMARY KEY (`id_prof`),
-  KEY `prof_user` (`fk_user_prof`),
-  KEY `prof_coleg` (`fk_coleg_prof`),
-  KEY `fk_funcionario_prof` (`fk_funcionario_prof`),
-  CONSTRAINT `prof_coleg` FOREIGN KEY (`fk_coleg_prof`) REFERENCES `tbl_colegiado` (`id_colegiado`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `prof_user` FOREIGN KEY (`fk_user_prof`) REFERENCES `tbl_user` (`id_user`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `tbl_professor_ibfk_1` FOREIGN KEY (`fk_funcionario_prof`) REFERENCES `tbl_func_professor` (`id_professor`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `tbl_professor`
---
-
-LOCK TABLES `tbl_professor` WRITE;
-/*!40000 ALTER TABLE `tbl_professor` DISABLE KEYS */;
-INSERT INTO `tbl_professor` VALUES (1,4,NULL,1,0);
-/*!40000 ALTER TABLE `tbl_professor` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `tbl_reitoria`
---
-
-DROP TABLE IF EXISTS `tbl_reitoria`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `tbl_reitoria` (
+CREATE TABLE `tbl_reitorias` (
   `id_reitoria` int(11) NOT NULL AUTO_INCREMENT,
-  `nome` varchar(120) DEFAULT NULL,
+  `nome_reitoria` varchar(120) DEFAULT NULL,
   PRIMARY KEY (`id_reitoria`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `tbl_reitoria`
+-- Dumping data for table `tbl_reitorias`
 --
 
-LOCK TABLES `tbl_reitoria` WRITE;
-/*!40000 ALTER TABLE `tbl_reitoria` DISABLE KEYS */;
-/*!40000 ALTER TABLE `tbl_reitoria` ENABLE KEYS */;
+LOCK TABLES `tbl_reitorias` WRITE;
+/*!40000 ALTER TABLE `tbl_reitorias` DISABLE KEYS */;
+/*!40000 ALTER TABLE `tbl_reitorias` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Table structure for table `tbl_rua`
+-- Table structure for table `tbl_ruas`
 --
 
-DROP TABLE IF EXISTS `tbl_rua`;
+DROP TABLE IF EXISTS `tbl_ruas`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `tbl_rua` (
+CREATE TABLE `tbl_ruas` (
   `id_rua` int(11) NOT NULL AUTO_INCREMENT,
-  `fkbrrs` int(11) NOT NULL,
+  `fk_bairro` int(11) NOT NULL,
+  `fk_logradouro` int(11) NOT NULL,
   `nome_rua` varchar(100) NOT NULL,
-  `CEP` int(10) NOT NULL,
+  `cep` int(10) NOT NULL,
   PRIMARY KEY (`id_rua`),
-  KEY `rua_barrs` (`fkbrrs`),
-  CONSTRAINT `rua_barrs` FOREIGN KEY (`fkbrrs`) REFERENCES `tbl_bairros` (`BRRS_ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4;
+  KEY `bairro_rua` (`fk_bairro`),
+  KEY `logradouro_rua` (`fk_logradouro`),
+  CONSTRAINT `bairro_rua` FOREIGN KEY (`fk_bairro`) REFERENCES `tbl_bairros` (`id_bairro`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `logradouro_rua` FOREIGN KEY (`fk_logradouro`) REFERENCES `tbl_logradouros` (`id_logradouro`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `tbl_rua`
+-- Dumping data for table `tbl_ruas`
 --
 
-LOCK TABLES `tbl_rua` WRITE;
-/*!40000 ALTER TABLE `tbl_rua` DISABLE KEYS */;
-INSERT INTO `tbl_rua` VALUES (1,6,'FORTUNATO PERES',68904160),(2,6,'Claudomiro de Moraes',68904001);
-/*!40000 ALTER TABLE `tbl_rua` ENABLE KEYS */;
+LOCK TABLES `tbl_ruas` WRITE;
+/*!40000 ALTER TABLE `tbl_ruas` DISABLE KEYS */;
+INSERT INTO `tbl_ruas` VALUES (1,6,7,'Fortunato Peres',68904160),(2,6,1,'Claudomiro de Moraes',68904001);
+/*!40000 ALTER TABLE `tbl_ruas` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Table structure for table `tbl_sexo`
+-- Table structure for table `tbl_telefones_usuarios`
 --
 
-DROP TABLE IF EXISTS `tbl_sexo`;
+DROP TABLE IF EXISTS `tbl_telefones_usuarios`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `tbl_sexo` (
-  `id_sexo` int(11) NOT NULL AUTO_INCREMENT,
-  `sexo` varchar(32) DEFAULT NULL,
-  PRIMARY KEY (`id_sexo`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+CREATE TABLE `tbl_telefones_usuarios` (
+  `id_telefone_usuario` int(11) NOT NULL AUTO_INCREMENT,
+  `fk_usuario_telefone` int(11) NOT NULL,
+  `fk_tipo_telefone` int(11) NOT NULL,
+  `fk_ddd` int(11) NOT NULL,
+  `numero_telefone_usuario` varchar(20) NOT NULL,
+  PRIMARY KEY (`id_telefone_usuario`),
+  KEY `usuario_telefone` (`fk_usuario_telefone`),
+  KEY `tipo_telefone` (`fk_tipo_telefone`),
+  CONSTRAINT `tipo_telefone` FOREIGN KEY (`fk_tipo_telefone`) REFERENCES `tbl_tipos_telefone` (`id_tipo_telefone`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `usuario_telefone` FOREIGN KEY (`fk_usuario_telefone`) REFERENCES `tbl_usuarios` (`id_usuario`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `tbl_sexo`
+-- Dumping data for table `tbl_telefones_usuarios`
 --
 
-LOCK TABLES `tbl_sexo` WRITE;
-/*!40000 ALTER TABLE `tbl_sexo` DISABLE KEYS */;
-/*!40000 ALTER TABLE `tbl_sexo` ENABLE KEYS */;
+LOCK TABLES `tbl_telefones_usuarios` WRITE;
+/*!40000 ALTER TABLE `tbl_telefones_usuarios` DISABLE KEYS */;
+INSERT INTO `tbl_telefones_usuarios` VALUES (5,1,2,1,'99112-1212'),(6,2,2,1,'98112-1212'),(8,3,2,1,'99140-2020'),(9,11,2,1,'9 8112-1212');
+/*!40000 ALTER TABLE `tbl_telefones_usuarios` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Table structure for table `tbl_tel_user`
+-- Table structure for table `tbl_tipos_telefone`
 --
 
-DROP TABLE IF EXISTS `tbl_tel_user`;
+DROP TABLE IF EXISTS `tbl_tipos_telefone`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `tbl_tel_user` (
-  `id_tel_user` int(11) NOT NULL AUTO_INCREMENT,
-  `fk_user_tel` int(11) NOT NULL,
-  `fk_tipo_tel` int(11) NOT NULL,
-  `fk_ddd` int(11) DEFAULT NULL,
-  `numero_tel_user` varchar(20) NOT NULL,
-  PRIMARY KEY (`id_tel_user`),
-  KEY `user_tel` (`fk_user_tel`),
-  KEY `tipo_tel` (`fk_tipo_tel`),
-  KEY `fk_ddd` (`fk_ddd`),
-  CONSTRAINT `tbl_tel_user_ibfk_1` FOREIGN KEY (`fk_ddd`) REFERENCES `tbl_ddd` (`id_ddd`),
-  CONSTRAINT `tipo_tel` FOREIGN KEY (`fk_tipo_tel`) REFERENCES `tbl_tipo_tel` (`id_tipo_tel`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `user_tel` FOREIGN KEY (`fk_user_tel`) REFERENCES `tbl_user` (`id_user`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `tbl_tel_user`
---
-
-LOCK TABLES `tbl_tel_user` WRITE;
-/*!40000 ALTER TABLE `tbl_tel_user` DISABLE KEYS */;
-/*!40000 ALTER TABLE `tbl_tel_user` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `tbl_tipo_tel`
---
-
-DROP TABLE IF EXISTS `tbl_tipo_tel`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `tbl_tipo_tel` (
-  `id_tipo_tel` int(11) NOT NULL AUTO_INCREMENT,
-  `tipo_tel` varchar(8) NOT NULL,
-  PRIMARY KEY (`id_tipo_tel`)
+CREATE TABLE `tbl_tipos_telefone` (
+  `id_tipo_telefone` int(11) NOT NULL AUTO_INCREMENT,
+  `tipo_telefone` varchar(8) NOT NULL,
+  PRIMARY KEY (`id_tipo_telefone`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `tbl_tipo_tel`
+-- Dumping data for table `tbl_tipos_telefone`
 --
 
-LOCK TABLES `tbl_tipo_tel` WRITE;
-/*!40000 ALTER TABLE `tbl_tipo_tel` DISABLE KEYS */;
-INSERT INTO `tbl_tipo_tel` VALUES (1,'Fixo'),(2,'celular'),(3,'Fax');
-/*!40000 ALTER TABLE `tbl_tipo_tel` ENABLE KEYS */;
+LOCK TABLES `tbl_tipos_telefone` WRITE;
+/*!40000 ALTER TABLE `tbl_tipos_telefone` DISABLE KEYS */;
+INSERT INTO `tbl_tipos_telefone` VALUES (1,'Fixo'),(2,'Celular'),(3,'Fax');
+/*!40000 ALTER TABLE `tbl_tipos_telefone` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -832,16 +814,16 @@ DROP TABLE IF EXISTS `tbl_turmas`;
 CREATE TABLE `tbl_turmas` (
   `id_turma` int(11) NOT NULL AUTO_INCREMENT,
   `fk_curso_turma` int(11) NOT NULL,
-  `fk_turno` int(11) DEFAULT NULL,
-  `numero_alunos_tur` int(11) NOT NULL,
-  `fk_calendario` int(11) DEFAULT NULL,
+  `fk_turno` int(11) NOT NULL,
+  `fk_calendario` int(11) NOT NULL,
+  `numero_discentes_turma` int(11) NOT NULL,
   PRIMARY KEY (`id_turma`),
   KEY `turma_curso` (`fk_curso_turma`),
-  KEY `fk_calendario` (`fk_calendario`),
-  KEY `fk_turno` (`fk_turno`),
-  CONSTRAINT `tbl_turmas_ibfk_1` FOREIGN KEY (`fk_calendario`) REFERENCES `tbl_calendario` (`id_calendario`),
-  CONSTRAINT `tbl_turmas_ibfk_2` FOREIGN KEY (`fk_turno`) REFERENCES `tbl_turno` (`id_turno`),
-  CONSTRAINT `turma_curso` FOREIGN KEY (`fk_curso_turma`) REFERENCES `tbl_cursos` (`id_curso`) ON DELETE CASCADE ON UPDATE CASCADE
+  KEY `calendario_turma` (`fk_calendario`),
+  KEY `turno_turma` (`fk_turno`),
+  CONSTRAINT `calendario_turma` FOREIGN KEY (`fk_calendario`) REFERENCES `tbl_calendarios` (`id_calendario`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `turma_curso` FOREIGN KEY (`fk_curso_turma`) REFERENCES `tbl_cursos` (`id_curso`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `turno_turma` FOREIGN KEY (`fk_turno`) REFERENCES `tbl_turnos` (`id_turno`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -851,91 +833,530 @@ CREATE TABLE `tbl_turmas` (
 
 LOCK TABLES `tbl_turmas` WRITE;
 /*!40000 ALTER TABLE `tbl_turmas` DISABLE KEYS */;
-INSERT INTO `tbl_turmas` VALUES (1,3,NULL,30,NULL);
+INSERT INTO `tbl_turmas` VALUES (1,3,3,1,30);
 /*!40000 ALTER TABLE `tbl_turmas` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Table structure for table `tbl_turno`
+-- Table structure for table `tbl_turnos`
 --
 
-DROP TABLE IF EXISTS `tbl_turno`;
+DROP TABLE IF EXISTS `tbl_turnos`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `tbl_turno` (
-  `id_turno` int(11) NOT NULL AUTO_INCREMENT,
-  `turno` varchar(32) DEFAULT NULL,
+CREATE TABLE `tbl_turnos` (
+  `id_turno` int(11) NOT NULL,
+  `turno` varchar(32) NOT NULL,
   PRIMARY KEY (`id_turno`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `tbl_turno`
+-- Dumping data for table `tbl_turnos`
 --
 
-LOCK TABLES `tbl_turno` WRITE;
-/*!40000 ALTER TABLE `tbl_turno` DISABLE KEYS */;
-/*!40000 ALTER TABLE `tbl_turno` ENABLE KEYS */;
+LOCK TABLES `tbl_turnos` WRITE;
+/*!40000 ALTER TABLE `tbl_turnos` DISABLE KEYS */;
+INSERT INTO `tbl_turnos` VALUES (1,'Matutino'),(2,'Vespertino'),(3,'Noturno');
+/*!40000 ALTER TABLE `tbl_turnos` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Table structure for table `tbl_uf`
+-- Table structure for table `tbl_ufs`
 --
 
-DROP TABLE IF EXISTS `tbl_uf`;
+DROP TABLE IF EXISTS `tbl_ufs`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `tbl_uf` (
-  `UF_ID` int(11) NOT NULL AUTO_INCREMENT,
-  `UF` varchar(5) NOT NULL,
-  `UF_DESCRICAO` varchar(20) NOT NULL,
-  PRIMARY KEY (`UF_ID`)
+CREATE TABLE `tbl_ufs` (
+  `id_uf` int(11) NOT NULL AUTO_INCREMENT,
+  `uf` varchar(5) NOT NULL,
+  `uf_descricao` varchar(20) NOT NULL,
+  PRIMARY KEY (`id_uf`)
 ) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `tbl_uf`
+-- Dumping data for table `tbl_ufs`
 --
 
-LOCK TABLES `tbl_uf` WRITE;
-/*!40000 ALTER TABLE `tbl_uf` DISABLE KEYS */;
-INSERT INTO `tbl_uf` VALUES (1,'AC','Acre'),(2,'AL','Alagoas'),(3,'AM','Amazonas'),(4,'AP','Amapá'),(5,'BA','Bahia'),(6,'CE','Ceará'),(7,'DF','Distrito Federal'),(8,'ES','Espírito Santo'),(9,'GO','Goiás'),(10,'MA','Maranhão'),(11,'MG','Minas Gerais'),(12,'MS','Mato Grosso do Sul'),(13,'MT','Mato Grosso'),(14,'PA','Pará'),(15,'PB','Paraíba'),(16,'PE','Pernambuco'),(17,'PI','Piauí'),(18,'PR','Paraná'),(19,'RJ','Rio de Janeiro'),(20,'RN','Rio Grande do Norte'),(21,'RO','Rondonia'),(22,'RR','Roraima'),(23,'RS','Rio Grande do Sul'),(24,'SC','Santa Catarina'),(25,'SE','Sergipe'),(26,'SP','São Paulo'),(27,'TO','Tocantins');
-/*!40000 ALTER TABLE `tbl_uf` ENABLE KEYS */;
+LOCK TABLES `tbl_ufs` WRITE;
+/*!40000 ALTER TABLE `tbl_ufs` DISABLE KEYS */;
+INSERT INTO `tbl_ufs` VALUES (1,'AC','Acre'),(2,'AL','Alagoas'),(3,'AM','Amazonas'),(4,'AP','Amapá'),(5,'BA','Bahia'),(6,'CE','Ceará'),(7,'DF','Distrito Federal'),(8,'ES','Espírito Santo'),(9,'GO','Goiás'),(10,'MA','Maranhão'),(11,'MG','Minas Gerais'),(12,'MS','Mato Grosso do Sul'),(13,'MT','Mato Grosso'),(14,'PA','Pará'),(15,'PB','Paraíba'),(16,'PE','Pernambuco'),(17,'PI','Piauí'),(18,'PR','Paraná'),(19,'RJ','Rio de Janeiro'),(20,'RN','Rio Grande do Norte'),(21,'RO','Rondonia'),(22,'RR','Roraima'),(23,'RS','Rio Grande do Sul'),(24,'SC','Santa Catarina'),(25,'SE','Sergipe'),(26,'SP','São Paulo'),(27,'TO','Tocantins');
+/*!40000 ALTER TABLE `tbl_ufs` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Table structure for table `tbl_user`
+-- Table structure for table `tbl_usuarios`
 --
 
-DROP TABLE IF EXISTS `tbl_user`;
+DROP TABLE IF EXISTS `tbl_usuarios`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `tbl_user` (
-  `id_user` int(11) NOT NULL AUTO_INCREMENT,
-  `nome_user` varchar(30) NOT NULL,
-  `sobrenome_user` varchar(30) NOT NULL,
-  `cpf_user` varchar(100) NOT NULL,
-  `status_user` tinyint(1) NOT NULL,
-  `sexo_user` char(1) NOT NULL,
-  `pai_user` varchar(60) NOT NULL,
-  `mae_user` varchar(60) NOT NULL,
-  `email_user` varchar(90) NOT NULL,
-  `fk_sexo` int(11) DEFAULT NULL,
-  PRIMARY KEY (`id_user`),
-  KEY `fk_sexo` (`fk_sexo`),
-  CONSTRAINT `tbl_user_ibfk_1` FOREIGN KEY (`fk_sexo`) REFERENCES `tbl_sexo` (`id_sexo`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=latin1;
+CREATE TABLE `tbl_usuarios` (
+  `id_usuario` int(11) NOT NULL AUTO_INCREMENT,
+  `nome_usuario` varchar(30) NOT NULL,
+  `sobrenome_usuario` varchar(30) NOT NULL,
+  `cpf_usuario` varchar(100) NOT NULL,
+  `situacao_usuario` tinyint(1) NOT NULL,
+  `sexo_usuario` tinyint(1) NOT NULL,
+  `pai_usuario` varchar(60) NOT NULL,
+  `mae_usuario` varchar(60) NOT NULL,
+  `email_usuario` varchar(90) NOT NULL,
+  PRIMARY KEY (`id_usuario`)
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `tbl_user`
+-- Dumping data for table `tbl_usuarios`
 --
 
-LOCK TABLES `tbl_user` WRITE;
-/*!40000 ALTER TABLE `tbl_user` DISABLE KEYS */;
-INSERT INTO `tbl_user` VALUES (1,'Miguel','dos anjos de almeida','99999999911',0,'m','carlos dos anjos','maria de almeida','miguel@unifap.br',NULL),(2,'sofia','brasil dias','88888888811',0,'f','joão brasil','rubi dias','sofia@unifap.br',NULL),(3,'Arthur','bezerra souza','77777777711',0,'m','vando bezerra','maria souza bezerra','Arthur@gmail.com',NULL),(4,'Julia','pereira moraes','66666666611',0,'f','manoel moraes','isa pereira','Julia@gmail.com',NULL),(9,'vai','vai','999',0,'m','vai','vai','cai@cai',NULL),(10,'unifap','unifap','1111',0,'m','unifap','unifap','unifap@unifap.com',NULL);
-/*!40000 ALTER TABLE `tbl_user` ENABLE KEYS */;
+LOCK TABLES `tbl_usuarios` WRITE;
+/*!40000 ALTER TABLE `tbl_usuarios` DISABLE KEYS */;
+INSERT INTO `tbl_usuarios` VALUES (1,'Miguel','dos Anjos de Almeida','99999999911',0,0,'Carlos dos Anjos','Maria de Almeida','miguel@unifap.br'),(2,'Sofia','Brasil Dias','88888888811',0,0,'João Brasil','Rubi Dias','sofia@unifap.br'),(3,'Arthur','Bezerra Souza','77777777711',0,0,'Vando Bezerra','Maria Souza Bezerra','arthur@gmail.com'),(4,'Julia','Pereira Moraes','66666666611',0,0,'Manoel Moraes','Isa Pereira','julia@gmail.com'),(11,'Adeildo','Silva','789654321147',1,1,'Silva Pai','Silva Mae','adeildo@unifap.br');
+/*!40000 ALTER TABLE `tbl_usuarios` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Temporary table structure for view `view_analistas`
+--
+
+DROP TABLE IF EXISTS `view_analistas`;
+/*!50001 DROP VIEW IF EXISTS `view_analistas`*/;
+SET @saved_cs_client     = @@character_set_client;
+SET character_set_client = utf8;
+/*!50001 CREATE VIEW `view_analistas` AS SELECT 
+ 1 AS `Função`,
+ 1 AS `Carga Horária`,
+ 1 AS `Data de Admissão`,
+ 1 AS `Data de Demissão`*/;
+SET character_set_client = @saved_cs_client;
+
+--
+-- Temporary table structure for view `view_colegiados`
+--
+
+DROP TABLE IF EXISTS `view_colegiados`;
+/*!50001 DROP VIEW IF EXISTS `view_colegiados`*/;
+SET @saved_cs_client     = @@character_set_client;
+SET character_set_client = utf8;
+/*!50001 CREATE VIEW `view_colegiados` AS SELECT 
+ 1 AS `Nome`,
+ 1 AS `Sigla`*/;
+SET character_set_client = @saved_cs_client;
+
+--
+-- Temporary table structure for view `view_cursos`
+--
+
+DROP TABLE IF EXISTS `view_cursos`;
+/*!50001 DROP VIEW IF EXISTS `view_cursos`*/;
+SET @saved_cs_client     = @@character_set_client;
+SET character_set_client = utf8;
+/*!50001 CREATE VIEW `view_cursos` AS SELECT 
+ 1 AS `Nome`,
+ 1 AS `Colegiado`*/;
+SET character_set_client = @saved_cs_client;
+
+--
+-- Temporary table structure for view `view_cursos_disciplinas`
+--
+
+DROP TABLE IF EXISTS `view_cursos_disciplinas`;
+/*!50001 DROP VIEW IF EXISTS `view_cursos_disciplinas`*/;
+SET @saved_cs_client     = @@character_set_client;
+SET character_set_client = utf8;
+/*!50001 CREATE VIEW `view_cursos_disciplinas` AS SELECT 
+ 1 AS `Nome`,
+ 1 AS `Carga Horária`,
+ 1 AS `Curso`*/;
+SET character_set_client = @saved_cs_client;
+
+--
+-- Temporary table structure for view `view_discentes`
+--
+
+DROP TABLE IF EXISTS `view_discentes`;
+/*!50001 DROP VIEW IF EXISTS `view_discentes`*/;
+SET @saved_cs_client     = @@character_set_client;
+SET character_set_client = utf8;
+/*!50001 CREATE VIEW `view_discentes` AS SELECT 
+ 1 AS `Ano de Início`,
+ 1 AS `Nome`,
+ 1 AS `Curso`*/;
+SET character_set_client = @saved_cs_client;
+
+--
+-- Temporary table structure for view `view_disciplinas`
+--
+
+DROP TABLE IF EXISTS `view_disciplinas`;
+/*!50001 DROP VIEW IF EXISTS `view_disciplinas`*/;
+SET @saved_cs_client     = @@character_set_client;
+SET character_set_client = utf8;
+/*!50001 CREATE VIEW `view_disciplinas` AS SELECT 
+ 1 AS `Nome`,
+ 1 AS `Carga Horária`,
+ 1 AS `Quantidade de Discentes`*/;
+SET character_set_client = @saved_cs_client;
+
+--
+-- Temporary table structure for view `view_docentes`
+--
+
+DROP TABLE IF EXISTS `view_docentes`;
+/*!50001 DROP VIEW IF EXISTS `view_docentes`*/;
+SET @saved_cs_client     = @@character_set_client;
+SET character_set_client = utf8;
+/*!50001 CREATE VIEW `view_docentes` AS SELECT 
+ 1 AS `Situação`,
+ 1 AS `Nome`,
+ 1 AS `Sobrenome`,
+ 1 AS `Colegiado`*/;
+SET character_set_client = @saved_cs_client;
+
+--
+-- Temporary table structure for view `view_enderecos_usuarios`
+--
+
+DROP TABLE IF EXISTS `view_enderecos_usuarios`;
+/*!50001 DROP VIEW IF EXISTS `view_enderecos_usuarios`*/;
+SET @saved_cs_client     = @@character_set_client;
+SET character_set_client = utf8;
+/*!50001 CREATE VIEW `view_enderecos_usuarios` AS SELECT 
+ 1 AS `Nome`,
+ 1 AS `Sobrenome`,
+ 1 AS `Logradouro`,
+ 1 AS `Endereço`,
+ 1 AS `Número`,
+ 1 AS `Complemento`,
+ 1 AS `Bairro`,
+ 1 AS `CEP`,
+ 1 AS `Município`,
+ 1 AS `Estado`*/;
+SET character_set_client = @saved_cs_client;
+
+--
+-- Temporary table structure for view `view_especialidades`
+--
+
+DROP TABLE IF EXISTS `view_especialidades`;
+/*!50001 DROP VIEW IF EXISTS `view_especialidades`*/;
+SET @saved_cs_client     = @@character_set_client;
+SET character_set_client = utf8;
+/*!50001 CREATE VIEW `view_especialidades` AS SELECT 
+ 1 AS `Area`,
+ 1 AS `Grau`*/;
+SET character_set_client = @saved_cs_client;
+
+--
+-- Temporary table structure for view `view_funcionarios`
+--
+
+DROP TABLE IF EXISTS `view_funcionarios`;
+/*!50001 DROP VIEW IF EXISTS `view_funcionarios`*/;
+SET @saved_cs_client     = @@character_set_client;
+SET character_set_client = utf8;
+/*!50001 CREATE VIEW `view_funcionarios` AS SELECT 
+ 1 AS `Função`,
+ 1 AS `Carga Horária`,
+ 1 AS `Data de Admissão`,
+ 1 AS `Data de Demissão`*/;
+SET character_set_client = @saved_cs_client;
+
+--
+-- Temporary table structure for view `view_funcionarios_analistas`
+--
+
+DROP TABLE IF EXISTS `view_funcionarios_analistas`;
+/*!50001 DROP VIEW IF EXISTS `view_funcionarios_analistas`*/;
+SET @saved_cs_client     = @@character_set_client;
+SET character_set_client = utf8;
+/*!50001 CREATE VIEW `view_funcionarios_analistas` AS SELECT 
+ 1 AS `Salário`,
+ 1 AS `Nome`,
+ 1 AS `Colegiado`,
+ 1 AS `Função`,
+ 1 AS `Especialidade`*/;
+SET character_set_client = @saved_cs_client;
+
+--
+-- Temporary table structure for view `view_usuario`
+--
+
+DROP TABLE IF EXISTS `view_usuario`;
+/*!50001 DROP VIEW IF EXISTS `view_usuario`*/;
+SET @saved_cs_client     = @@character_set_client;
+SET character_set_client = utf8;
+/*!50001 CREATE VIEW `view_usuario` AS SELECT 
+ 1 AS `Nome`,
+ 1 AS `Sobrenome`,
+ 1 AS `Email`,
+ 1 AS `CPF`,
+ 1 AS `Situação`,
+ 1 AS `Sexo`,
+ 1 AS `Nome do Pai`,
+ 1 AS `Nome da Mãe`,
+ 1 AS `Tipo de Telefone`,
+ 1 AS `DDD`,
+ 1 AS `Número de Telefone`*/;
+SET character_set_client = @saved_cs_client;
+
+--
+-- Temporary table structure for view `view_usuarios`
+--
+
+DROP TABLE IF EXISTS `view_usuarios`;
+/*!50001 DROP VIEW IF EXISTS `view_usuarios`*/;
+SET @saved_cs_client     = @@character_set_client;
+SET character_set_client = utf8;
+/*!50001 CREATE VIEW `view_usuarios` AS SELECT 
+ 1 AS `Nome`,
+ 1 AS `Sobrenome`,
+ 1 AS `Email`,
+ 1 AS `CPF`,
+ 1 AS `Situação`,
+ 1 AS `Sexo`,
+ 1 AS `Nome do Pai`,
+ 1 AS `Nome da Mãe`,
+ 1 AS `Tipo de Telefone`,
+ 1 AS `Número de Telefone`,
+ 1 AS `DDD`*/;
+SET character_set_client = @saved_cs_client;
+
+--
+-- Final view structure for view `view_analistas`
+--
+
+/*!50001 DROP VIEW IF EXISTS `view_analistas`*/;
+/*!50001 SET @saved_cs_client          = @@character_set_client */;
+/*!50001 SET @saved_cs_results         = @@character_set_results */;
+/*!50001 SET @saved_col_connection     = @@collation_connection */;
+/*!50001 SET character_set_client      = utf8 */;
+/*!50001 SET character_set_results     = utf8 */;
+/*!50001 SET collation_connection      = utf8_general_ci */;
+/*!50001 CREATE ALGORITHM=UNDEFINED */
+/*!50013 DEFINER=`root`@`localhost` SQL SECURITY DEFINER */
+/*!50001 VIEW `view_analistas` AS select `view_funcionarios`.`Função` AS `Função`,`view_funcionarios`.`Carga Horária` AS `Carga Horária`,`view_funcionarios`.`Data de Admissão` AS `Data de Admissão`,`view_funcionarios`.`Data de Demissão` AS `Data de Demissão` from `view_funcionarios` union select `view_funcionarios_analistas`.`Salário` AS `Salário`,`view_funcionarios_analistas`.`Nome` AS `Nome`,`view_funcionarios_analistas`.`Colegiado` AS `Colegiado`,`view_funcionarios_analistas`.`Especialidade` AS `Especialidade` from `view_funcionarios_analistas` */;
+/*!50001 SET character_set_client      = @saved_cs_client */;
+/*!50001 SET character_set_results     = @saved_cs_results */;
+/*!50001 SET collation_connection      = @saved_col_connection */;
+
+--
+-- Final view structure for view `view_colegiados`
+--
+
+/*!50001 DROP VIEW IF EXISTS `view_colegiados`*/;
+/*!50001 SET @saved_cs_client          = @@character_set_client */;
+/*!50001 SET @saved_cs_results         = @@character_set_results */;
+/*!50001 SET @saved_col_connection     = @@collation_connection */;
+/*!50001 SET character_set_client      = utf8 */;
+/*!50001 SET character_set_results     = utf8 */;
+/*!50001 SET collation_connection      = utf8_general_ci */;
+/*!50001 CREATE ALGORITHM=UNDEFINED */
+/*!50013 DEFINER=`root`@`localhost` SQL SECURITY DEFINER */
+/*!50001 VIEW `view_colegiados` AS select `tbl_colegiados`.`nome_colegiado` AS `Nome`,`tbl_colegiados`.`codigo_colegiado` AS `Sigla` from `tbl_colegiados` */;
+/*!50001 SET character_set_client      = @saved_cs_client */;
+/*!50001 SET character_set_results     = @saved_cs_results */;
+/*!50001 SET collation_connection      = @saved_col_connection */;
+
+--
+-- Final view structure for view `view_cursos`
+--
+
+/*!50001 DROP VIEW IF EXISTS `view_cursos`*/;
+/*!50001 SET @saved_cs_client          = @@character_set_client */;
+/*!50001 SET @saved_cs_results         = @@character_set_results */;
+/*!50001 SET @saved_col_connection     = @@collation_connection */;
+/*!50001 SET character_set_client      = utf8 */;
+/*!50001 SET character_set_results     = utf8 */;
+/*!50001 SET collation_connection      = utf8_general_ci */;
+/*!50001 CREATE ALGORITHM=UNDEFINED */
+/*!50013 DEFINER=`root`@`localhost` SQL SECURITY DEFINER */
+/*!50001 VIEW `view_cursos` AS select `tbl_cursos`.`nome_curso` AS `Nome`,`tbl_colegiados`.`codigo_colegiado` AS `Colegiado` from (`tbl_cursos` join `tbl_colegiados` on((`tbl_cursos`.`fk_colegiado_curso` = `tbl_colegiados`.`id_colegiado`))) */;
+/*!50001 SET character_set_client      = @saved_cs_client */;
+/*!50001 SET character_set_results     = @saved_cs_results */;
+/*!50001 SET collation_connection      = @saved_col_connection */;
+
+--
+-- Final view structure for view `view_cursos_disciplinas`
+--
+
+/*!50001 DROP VIEW IF EXISTS `view_cursos_disciplinas`*/;
+/*!50001 SET @saved_cs_client          = @@character_set_client */;
+/*!50001 SET @saved_cs_results         = @@character_set_results */;
+/*!50001 SET @saved_col_connection     = @@collation_connection */;
+/*!50001 SET character_set_client      = utf8 */;
+/*!50001 SET character_set_results     = utf8 */;
+/*!50001 SET collation_connection      = utf8_general_ci */;
+/*!50001 CREATE ALGORITHM=UNDEFINED */
+/*!50013 DEFINER=`root`@`localhost` SQL SECURITY DEFINER */
+/*!50001 VIEW `view_cursos_disciplinas` AS select `tbl_disciplinas`.`nome_disciplina` AS `Nome`,`tbl_disciplinas`.`carga_horaria_disciplina` AS `Carga Horária`,`tbl_cursos`.`nome_curso` AS `Curso` from ((`tbl_cursos_disciplinas` join `tbl_cursos` on((`tbl_cursos_disciplinas`.`fk_curso` = `tbl_cursos`.`id_curso`))) join `tbl_disciplinas` on((`tbl_cursos_disciplinas`.`fk_curso` = `tbl_disciplinas`.`id_disciplina`))) */;
+/*!50001 SET character_set_client      = @saved_cs_client */;
+/*!50001 SET character_set_results     = @saved_cs_results */;
+/*!50001 SET collation_connection      = @saved_col_connection */;
+
+--
+-- Final view structure for view `view_discentes`
+--
+
+/*!50001 DROP VIEW IF EXISTS `view_discentes`*/;
+/*!50001 SET @saved_cs_client          = @@character_set_client */;
+/*!50001 SET @saved_cs_results         = @@character_set_results */;
+/*!50001 SET @saved_col_connection     = @@collation_connection */;
+/*!50001 SET character_set_client      = utf8 */;
+/*!50001 SET character_set_results     = utf8 */;
+/*!50001 SET collation_connection      = utf8_general_ci */;
+/*!50001 CREATE ALGORITHM=UNDEFINED */
+/*!50013 DEFINER=`root`@`localhost` SQL SECURITY DEFINER */
+/*!50001 VIEW `view_discentes` AS select `tbl_discentes`.`ano_inicio` AS `Ano de Início`,`tbl_usuarios`.`nome_usuario` AS `Nome`,`tbl_cursos`.`nome_curso` AS `Curso` from ((`tbl_discentes` join `tbl_usuarios` on((`tbl_discentes`.`fk_usuario_discente` = `tbl_usuarios`.`id_usuario`))) join `tbl_cursos` on((`tbl_discentes`.`fk_curso_discente` = `tbl_cursos`.`id_curso`))) */;
+/*!50001 SET character_set_client      = @saved_cs_client */;
+/*!50001 SET character_set_results     = @saved_cs_results */;
+/*!50001 SET collation_connection      = @saved_col_connection */;
+
+--
+-- Final view structure for view `view_disciplinas`
+--
+
+/*!50001 DROP VIEW IF EXISTS `view_disciplinas`*/;
+/*!50001 SET @saved_cs_client          = @@character_set_client */;
+/*!50001 SET @saved_cs_results         = @@character_set_results */;
+/*!50001 SET @saved_col_connection     = @@collation_connection */;
+/*!50001 SET character_set_client      = utf8 */;
+/*!50001 SET character_set_results     = utf8 */;
+/*!50001 SET collation_connection      = utf8_general_ci */;
+/*!50001 CREATE ALGORITHM=UNDEFINED */
+/*!50013 DEFINER=`root`@`localhost` SQL SECURITY DEFINER */
+/*!50001 VIEW `view_disciplinas` AS select `tbl_disciplinas`.`nome_disciplina` AS `Nome`,`tbl_disciplinas`.`carga_horaria_disciplina` AS `Carga Horária`,`tbl_disciplinas`.`numero_discentes_disciplina` AS `Quantidade de Discentes` from `tbl_disciplinas` */;
+/*!50001 SET character_set_client      = @saved_cs_client */;
+/*!50001 SET character_set_results     = @saved_cs_results */;
+/*!50001 SET collation_connection      = @saved_col_connection */;
+
+--
+-- Final view structure for view `view_docentes`
+--
+
+/*!50001 DROP VIEW IF EXISTS `view_docentes`*/;
+/*!50001 SET @saved_cs_client          = @@character_set_client */;
+/*!50001 SET @saved_cs_results         = @@character_set_results */;
+/*!50001 SET @saved_col_connection     = @@collation_connection */;
+/*!50001 SET character_set_client      = utf8 */;
+/*!50001 SET character_set_results     = utf8 */;
+/*!50001 SET collation_connection      = utf8_general_ci */;
+/*!50001 CREATE ALGORITHM=UNDEFINED */
+/*!50013 DEFINER=`root`@`localhost` SQL SECURITY DEFINER */
+/*!50001 VIEW `view_docentes` AS select (case `tbl_docentes`.`situacao_docente` when 0 then 'Efetivado' when 1 then 'Não efetivado' else NULL end) AS `Situação`,`tbl_usuarios`.`nome_usuario` AS `Nome`,`tbl_usuarios`.`sobrenome_usuario` AS `Sobrenome`,`tbl_colegiados`.`codigo_colegiado` AS `Colegiado` from ((`tbl_docentes` join `tbl_usuarios` on((`tbl_docentes`.`fk_usuario_docente` = `tbl_usuarios`.`id_usuario`))) join `tbl_colegiados` on((`tbl_docentes`.`fk_colegiado_docente` = `tbl_colegiados`.`id_colegiado`))) */;
+/*!50001 SET character_set_client      = @saved_cs_client */;
+/*!50001 SET character_set_results     = @saved_cs_results */;
+/*!50001 SET collation_connection      = @saved_col_connection */;
+
+--
+-- Final view structure for view `view_enderecos_usuarios`
+--
+
+/*!50001 DROP VIEW IF EXISTS `view_enderecos_usuarios`*/;
+/*!50001 SET @saved_cs_client          = @@character_set_client */;
+/*!50001 SET @saved_cs_results         = @@character_set_results */;
+/*!50001 SET @saved_col_connection     = @@collation_connection */;
+/*!50001 SET character_set_client      = utf8 */;
+/*!50001 SET character_set_results     = utf8 */;
+/*!50001 SET collation_connection      = utf8_general_ci */;
+/*!50001 CREATE ALGORITHM=UNDEFINED */
+/*!50013 DEFINER=`root`@`localhost` SQL SECURITY DEFINER */
+/*!50001 VIEW `view_enderecos_usuarios` AS select `tbl_usuarios`.`nome_usuario` AS `Nome`,`tbl_usuarios`.`sobrenome_usuario` AS `Sobrenome`,`tbl_logradouros`.`descricao_logradouro` AS `Logradouro`,`tbl_ruas`.`nome_rua` AS `Endereço`,`tbl_enderecos`.`numero_casa` AS `Número`,`tbl_enderecos`.`complemento_casa` AS `Complemento`,`tbl_bairros`.`bairro` AS `Bairro`,`tbl_ruas`.`cep` AS `CEP`,`tbl_cidades`.`descricao_cidade` AS `Município`,`tbl_ufs`.`uf` AS `Estado` from ((((((`tbl_enderecos` join `tbl_usuarios` on((`tbl_enderecos`.`fk_usuario` = `tbl_usuarios`.`id_usuario`))) join `tbl_ruas` on((`tbl_enderecos`.`fk_rua` = `tbl_ruas`.`id_rua`))) join `tbl_bairros` on((`tbl_ruas`.`fk_bairro` = `tbl_bairros`.`id_bairro`))) join `tbl_logradouros` on((`tbl_ruas`.`fk_logradouro` = `tbl_logradouros`.`id_logradouro`))) join `tbl_cidades` on((`tbl_bairros`.`fk_cidade` = `tbl_cidades`.`id_cidade`))) join `tbl_ufs` on((`tbl_cidades`.`fk_uf` = `tbl_ufs`.`id_uf`))) */;
+/*!50001 SET character_set_client      = @saved_cs_client */;
+/*!50001 SET character_set_results     = @saved_cs_results */;
+/*!50001 SET collation_connection      = @saved_col_connection */;
+
+--
+-- Final view structure for view `view_especialidades`
+--
+
+/*!50001 DROP VIEW IF EXISTS `view_especialidades`*/;
+/*!50001 SET @saved_cs_client          = @@character_set_client */;
+/*!50001 SET @saved_cs_results         = @@character_set_results */;
+/*!50001 SET @saved_col_connection     = @@collation_connection */;
+/*!50001 SET character_set_client      = utf8 */;
+/*!50001 SET character_set_results     = utf8 */;
+/*!50001 SET collation_connection      = utf8_general_ci */;
+/*!50001 CREATE ALGORITHM=UNDEFINED */
+/*!50013 DEFINER=`root`@`localhost` SQL SECURITY DEFINER */
+/*!50001 VIEW `view_especialidades` AS select `tbl_especialidades`.`area` AS `Area`,`tbl_especialidades`.`grau` AS `Grau` from `tbl_especialidades` */;
+/*!50001 SET character_set_client      = @saved_cs_client */;
+/*!50001 SET character_set_results     = @saved_cs_results */;
+/*!50001 SET collation_connection      = @saved_col_connection */;
+
+--
+-- Final view structure for view `view_funcionarios`
+--
+
+/*!50001 DROP VIEW IF EXISTS `view_funcionarios`*/;
+/*!50001 SET @saved_cs_client          = @@character_set_client */;
+/*!50001 SET @saved_cs_results         = @@character_set_results */;
+/*!50001 SET @saved_col_connection     = @@collation_connection */;
+/*!50001 SET character_set_client      = utf8 */;
+/*!50001 SET character_set_results     = utf8 */;
+/*!50001 SET collation_connection      = utf8_general_ci */;
+/*!50001 CREATE ALGORITHM=UNDEFINED */
+/*!50013 DEFINER=`root`@`localhost` SQL SECURITY DEFINER */
+/*!50001 VIEW `view_funcionarios` AS select `tbl_funcionarios`.`vinculo` AS `Função`,`tbl_funcionarios`.`carga_horaria` AS `Carga Horária`,`tbl_funcionarios`.`data_admissao` AS `Data de Admissão`,`tbl_funcionarios`.`data_demissao` AS `Data de Demissão` from `tbl_funcionarios` */;
+/*!50001 SET character_set_client      = @saved_cs_client */;
+/*!50001 SET character_set_results     = @saved_cs_results */;
+/*!50001 SET collation_connection      = @saved_col_connection */;
+
+--
+-- Final view structure for view `view_funcionarios_analistas`
+--
+
+/*!50001 DROP VIEW IF EXISTS `view_funcionarios_analistas`*/;
+/*!50001 SET @saved_cs_client          = @@character_set_client */;
+/*!50001 SET @saved_cs_results         = @@character_set_results */;
+/*!50001 SET @saved_col_connection     = @@collation_connection */;
+/*!50001 SET character_set_client      = utf8 */;
+/*!50001 SET character_set_results     = utf8 */;
+/*!50001 SET collation_connection      = utf8_general_ci */;
+/*!50001 CREATE ALGORITHM=UNDEFINED */
+/*!50013 DEFINER=`root`@`localhost` SQL SECURITY DEFINER */
+/*!50001 VIEW `view_funcionarios_analistas` AS select `tbl_funcionarios_analistas`.`salario` AS `Salário`,`tbl_usuarios`.`nome_usuario` AS `Nome`,`tbl_colegiados`.`nome_colegiado` AS `Colegiado`,`tbl_funcionarios`.`vinculo` AS `Função`,`tbl_especialidades`.`area` AS `Especialidade` from ((((`tbl_funcionarios_analistas` join `tbl_usuarios` on((`tbl_funcionarios_analistas`.`fk_usuario` = `tbl_usuarios`.`id_usuario`))) join `tbl_colegiados` on((`tbl_funcionarios_analistas`.`fk_colegiado` = `tbl_colegiados`.`id_colegiado`))) join `tbl_funcionarios` on((`tbl_funcionarios_analistas`.`fk_funcionario` = `tbl_funcionarios`.`id_funcionario`))) join `tbl_especialidades` on((`tbl_funcionarios_analistas`.`fk_especialidade` = `tbl_especialidades`.`id_especialidade`))) */;
+/*!50001 SET character_set_client      = @saved_cs_client */;
+/*!50001 SET character_set_results     = @saved_cs_results */;
+/*!50001 SET collation_connection      = @saved_col_connection */;
+
+--
+-- Final view structure for view `view_usuario`
+--
+
+/*!50001 DROP VIEW IF EXISTS `view_usuario`*/;
+/*!50001 SET @saved_cs_client          = @@character_set_client */;
+/*!50001 SET @saved_cs_results         = @@character_set_results */;
+/*!50001 SET @saved_col_connection     = @@collation_connection */;
+/*!50001 SET character_set_client      = utf8 */;
+/*!50001 SET character_set_results     = utf8 */;
+/*!50001 SET collation_connection      = utf8_general_ci */;
+/*!50001 CREATE ALGORITHM=UNDEFINED */
+/*!50013 DEFINER=`root`@`localhost` SQL SECURITY DEFINER */
+/*!50001 VIEW `view_usuario` AS select `tbl_usuarios`.`nome_usuario` AS `Nome`,`tbl_usuarios`.`sobrenome_usuario` AS `Sobrenome`,`tbl_usuarios`.`email_usuario` AS `Email`,`tbl_usuarios`.`cpf_usuario` AS `CPF`,(case `tbl_usuarios`.`situacao_usuario` when 0 then 'Não Matriculado' when 1 then 'Matriculado' when 2 then 'Trancado' when 3 then 'Abandonado' when 4 then 'Concluído' else NULL end) AS `Situação`,(case `tbl_usuarios`.`sexo_usuario` when 0 then 'Masculino' when 1 then 'Feminino' else NULL end) AS `Sexo`,`tbl_usuarios`.`pai_usuario` AS `Nome do Pai`,`tbl_usuarios`.`mae_usuario` AS `Nome da Mãe`,`tbl_tipos_telefone`.`tipo_telefone` AS `Tipo de Telefone`,`tbl_ddds`.`ddd` AS `DDD`,`tbl_telefones_usuarios`.`numero_telefone_usuario` AS `Número de Telefone` from (((`tbl_usuarios` join `tbl_telefones_usuarios` on((`tbl_telefones_usuarios`.`fk_usuario_telefone` = `tbl_usuarios`.`id_usuario`))) join `tbl_tipos_telefone` on((`tbl_telefones_usuarios`.`fk_tipo_telefone` = `tbl_tipos_telefone`.`id_tipo_telefone`))) join `tbl_ddds` on((`tbl_telefones_usuarios`.`fk_ddd` = `tbl_ddds`.`id_ddd`))) */;
+/*!50001 SET character_set_client      = @saved_cs_client */;
+/*!50001 SET character_set_results     = @saved_cs_results */;
+/*!50001 SET collation_connection      = @saved_col_connection */;
+
+--
+-- Final view structure for view `view_usuarios`
+--
+
+/*!50001 DROP VIEW IF EXISTS `view_usuarios`*/;
+/*!50001 SET @saved_cs_client          = @@character_set_client */;
+/*!50001 SET @saved_cs_results         = @@character_set_results */;
+/*!50001 SET @saved_col_connection     = @@collation_connection */;
+/*!50001 SET character_set_client      = utf8 */;
+/*!50001 SET character_set_results     = utf8 */;
+/*!50001 SET collation_connection      = utf8_general_ci */;
+/*!50001 CREATE ALGORITHM=UNDEFINED */
+/*!50013 DEFINER=`root`@`localhost` SQL SECURITY DEFINER */
+/*!50001 VIEW `view_usuarios` AS select `tbl_usuarios`.`nome_usuario` AS `Nome`,`tbl_usuarios`.`sobrenome_usuario` AS `Sobrenome`,`tbl_usuarios`.`email_usuario` AS `Email`,`tbl_usuarios`.`cpf_usuario` AS `CPF`,(case `tbl_usuarios`.`situacao_usuario` when 0 then 'Não Matriculado' when 1 then 'Matriculado' when 2 then 'Trancado' when 3 then 'Abandonado' when 4 then 'Concluído' else NULL end) AS `Situação`,(case `tbl_usuarios`.`sexo_usuario` when 0 then 'Masculino' when 1 then 'Feminino' else NULL end) AS `Sexo`,`tbl_usuarios`.`pai_usuario` AS `Nome do Pai`,`tbl_usuarios`.`mae_usuario` AS `Nome da Mãe`,`tbl_tipos_telefone`.`tipo_telefone` AS `Tipo de Telefone`,`tbl_telefones_usuarios`.`numero_telefone_usuario` AS `Número de Telefone`,`tbl_ddds`.`ddd` AS `DDD` from (((`tbl_usuarios` join `tbl_telefones_usuarios` on((`tbl_telefones_usuarios`.`fk_usuario_telefone` = `tbl_usuarios`.`id_usuario`))) join `tbl_tipos_telefone` on((`tbl_telefones_usuarios`.`fk_tipo_telefone` = `tbl_tipos_telefone`.`id_tipo_telefone`))) join `tbl_ddds` on((`tbl_telefones_usuarios`.`fk_ddd` = `tbl_ddds`.`id_ddd`))) */;
+/*!50001 SET character_set_client      = @saved_cs_client */;
+/*!50001 SET character_set_results     = @saved_cs_results */;
+/*!50001 SET collation_connection      = @saved_col_connection */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -946,4 +1367,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-12-11 13:19:46
+-- Dump completed on 2019-12-12 17:35:37
