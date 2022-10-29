@@ -25,16 +25,17 @@ tempo_depois_soneca = distancia_depois_soneca/velocidade_lebre_ms
 tempo_total_lebre = tempo_antes_soneca+tempo_depois_soneca
 
 # tempo para lebre não perder
-tempo_soneca_nao_perder = tempo_tartaruga - tempo_total_lebre
+tempo_soneca_nao_perder = tempo_tartaruga - tempo_total_lebre  # s
 
 
 # formatando o tempo para horas:min:sec
 def converter_segundo(segundos):
-    segundos = segundos % (24*3600)
-    horas = segundos // 3600
-    segundos = segundos % 3600
-    minutos = segundos // 60
-    segundos = segundos % 60
+    horas = tempo_soneca_nao_perder//3600
+    resto = (tempo_soneca_nao_perder % 3600)/3600
+    print(resto)
+    minutos = resto * 60
+    resto = ((minutos % 60) - resto)/100
+    segundos = resto * 60
     print("Para que a lebre não perca o tempo da soneca deve durar: {:.0f}h:{:.0f}m:{:.0f}s".format(
         horas, minutos, segundos))
 
