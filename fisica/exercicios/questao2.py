@@ -16,6 +16,6 @@ aceleracao_gravidade = aceleracao/gravidade  # g
 print(aceleracao_gravidade)
 
 # após usar equação de Toricceli temos que:
-distancia_percorrida = (velocidade_ms**2)/2*aceleracao/1000
-print("A distancia percorrida pelo carro em 4s após acelerar de 0 a 100 é de {:.2f}km".format(
+distancia_percorrida = (velocidade_ms**2)/(2*aceleracao)
+print("A distancia percorrida pelo carro em 4s após acelerar de 0 a 100 é de {:.2f}m".format(
     distancia_percorrida))
