@@ -18,4 +18,4 @@ distancia_bolinhas = 2*(altura_fio*np.sin(angulo))
 # np.tan(angulo) = (10**11)*(carga**2)/massa*gravidade
 
 carga = np.sqrt(2.83*(10**-14))
-print(carga)
+print("A carga nas condições de equilibrio das bolinhas = {}".format(carga))
